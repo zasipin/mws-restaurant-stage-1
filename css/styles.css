@@ -277,3 +277,14 @@ nav h1 a {
   color: #666;
 }
 
+@media screen and (max-width: 1039px) {
+  #restaurants-list li {
+    width: 40%; 
+  }
+}
+
+@media screen and (max-width: 769px) {
+  #restaurants-list li {
+    width: 90%; 
+  }
+}
