@@ -37,7 +37,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 }
 #maincontent {
   background-color: #f3f3f3;
-  min-height: 100%;
+  min-height: 100%; 
 }
 #footer {
   background-color: #444;
@@ -101,9 +101,14 @@ nav h1 a:hover, nav h1 a:focus {
 }
 
 /* Add a color on mouse-over */
-#breadcrumb li a:hover {
+#breadcrumb li a:hover, 
+#breadcrumb li a:focus {
     color: #01447e;
     text-decoration: underline;
+}
+
+#breadcrumb li:last-child {
+  font-weight: bold;
 }
 /* ====================== Map ====================== */
 #map {
@@ -206,7 +211,7 @@ nav h1 a:hover, nav h1 a:focus {
 }
 .inside #map-container {
   background: blue none repeat scroll 0 0;
-  height: 87%;
+  height: calc(100% - 145px);
   position: fixed;
   right: 0;
   top: 80px;
@@ -220,7 +225,7 @@ nav h1 a:hover, nav h1 a:focus {
 .inside #footer {
   bottom: 0;
   position: absolute;
-  width: 50%;
+  width: 100%;
 }
 #restaurant-name {
   color: #f18200;
@@ -255,7 +260,7 @@ nav h1 a:hover, nav h1 a:focus {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
   padding: 140px 40px 30px;
-  width: 50%;
+  width: calc(50% - 50px);
 }
 #reviews-container {
   padding: 30px 40px 80px;
@@ -273,7 +278,8 @@ nav h1 a:hover, nav h1 a:focus {
 }
 #reviews-list li {
   background-color: #fff;
-    border: 2px solid #f3f3f3;
+  border: 2px solid #f3f3f3;
+  box-shadow: #999 0px 0px 8px;
   display: block;
   list-style-type: none;
   margin: 0 0 30px;
@@ -283,7 +289,10 @@ nav h1 a:hover, nav h1 a:focus {
   width: 85%;
 }
 #reviews-list li p {
-  margin: 0 0 10px;
+  margin: 10px 0;
+}
+#reviews-list li p:first-child {
+  font-weight: bold;
 }
 #restaurant-hours td {
   color: #666;
@@ -302,6 +311,10 @@ nav h1 a:hover, nav h1 a:focus {
 }
 
 @media screen and (max-width: 594px) {
+  .inside #breadcrumb {
+    width: calc(100% - 80px);
+  }
+
   .filter-options h2 {
     padding-top: 8px;
     width: 100%; 
@@ -309,6 +322,33 @@ nav h1 a:hover, nav h1 a:focus {
 
   nav h1 a {
     letter-spacing: 5px;
+  }
+  .inside {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .inside header {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .inside #maincontent {
+    margin-top: 50px;
+  }
+
+  .inside #map-container{
+    order: -1;
+    position: relative;
+    background: blue none repeat scroll 0 0;
+    min-height: 200px;
+    max-height: 400px;
+    right: 0;    
+    width: 100%; 
+  }
+
+  .inside #restaurant-container, 
+  .inside #reviews-container {
+    width: calc(100% - 40px);
   }
 }
 
