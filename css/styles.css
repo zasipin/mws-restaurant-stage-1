@@ -210,7 +210,8 @@ nav h1 a:hover, nav h1 a:focus {
   text-decoration: underline;
 }
 /* ====================== Restaurant Details ====================== */
-.inside header {
+.inside header, 
+header {
   position: fixed;
   top: 0;
   width: 100%;
