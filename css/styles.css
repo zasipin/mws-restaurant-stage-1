@@ -49,6 +49,11 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   text-transform: uppercase;
   width: calc(100% - 20px);
 }
+
+#footer a:hover,
+#footer a:focus {
+  text-decoration: underline;
+}
 /* ====================== Navigation ====================== */
 nav {
   width: 100%;
