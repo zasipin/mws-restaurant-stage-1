@@ -202,7 +202,6 @@ nav h1 a:hover, nav h1 a:focus {
 }
 #restaurants-list li a {
   background-color: orange;
-  border-bottom: 3px solid #eee;
   color: #fff;
   display: inline-block;
   font-size: 12pt;
@@ -212,9 +211,12 @@ nav h1 a:hover, nav h1 a:focus {
   text-decoration: none;
   text-transform: uppercase;
 }
-#restaurants-list li a:hover, #restaurants-list li a:focus {
+#restaurants-list li a:hover, 
+#restaurants-list li a:focus {
   background-color: #f55a00;
   text-decoration: underline;
+  outline: 0;
+  box-shadow: #f55a00 0 0 3px;
 }
 /* ====================== Restaurant Details ====================== */
 body {
