@@ -41,12 +41,13 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 }
 #footer {
   background-color: #444;
-  color: #aaa;
+  color: #eee;
   font-size: 9pt;
   letter-spacing: 1px;
-  padding: 25px;
+  padding: 25px 10px;
   text-align: center;
   text-transform: uppercase;
+  width: calc(100% - 20px);
 }
 /* ====================== Navigation ====================== */
 nav {
@@ -229,9 +230,9 @@ nav h1 a:hover, nav h1 a:focus {
   width: 100%;
 }
 .inside #footer {
-  bottom: 0;
-  position: absolute;
-  width: 100%;
+  /* bottom: 0; */
+  /* position: absolute; */
+  /* width: 100%; */
 }
 #restaurant-name {
   color: #f18200;
