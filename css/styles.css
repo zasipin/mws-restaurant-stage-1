@@ -312,8 +312,27 @@ header {
   margin: 10px 0;
 }
 #reviews-list li p:first-child {
+
+#reviews-list li p:first-child,
+#reviews-list li p:nth-child(2),
+#reviews-list li p:nth-child(3) {
   font-weight: bold;
 }
+
+#reviews-list li p:first-child
+{
+  float: right;
+}
+
+#reviews-list li .rating {
+  padding: 3px 5px;
+  font-weight: bold;
+  background-color: #f58500;
+  color: #fff;
+  border-radius: 3px;
+  width: 70px;
+}
+
 #restaurant-hours td {
   color: #666;
 }
