@@ -172,7 +172,7 @@ nav h1 a:hover, nav h1 a:focus {
   min-height: 380px;
   padding: 25px;
   text-align: left;
-  width: 26%;  
+  width: calc(30% - 41px);   
 }
 #restaurants-list .restaurant-img {
   background-color: #ccc;
@@ -353,7 +353,7 @@ header {
 
 @media screen and (max-width: 1039px) {
   #restaurants-list li {
-    width: 40%; 
+    width: calc(50% - 74px);  
   }
 }
 
