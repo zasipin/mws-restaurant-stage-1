@@ -298,7 +298,6 @@ header {
 }
 #reviews-list li {
   background-color: #fff;
-  border: 2px solid #f3f3f3;
   box-shadow: #999 0px 0px 8px;
   display: block;
   list-style-type: none;
