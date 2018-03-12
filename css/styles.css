@@ -331,9 +331,6 @@ header {
 }
 
 @media screen and (max-width: 594px) {
-  /* .inside #breadcrumb {
-    width: calc(100% - 80px);
-  } */
 
   .filter-options h2 {
     padding-top: 8px;
