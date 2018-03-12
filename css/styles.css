@@ -223,6 +223,7 @@ nav h1 a:hover, nav h1 a:focus {
 .inside #map-container {
   background: blue none repeat scroll 0 0;
   height: 100vh;
+  margin-top: 120px;
   
   /* height: 500px; */
   /* position: fixed; */
