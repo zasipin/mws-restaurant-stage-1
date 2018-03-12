@@ -116,6 +116,7 @@ nav h1 a:hover, nav h1 a:focus {
   height: 400px;
   width: 100%;
   background-color: #ccc;
+  margin-top: 80px;
 }
 /* ====================== Restaurant Filtering ====================== */
 .filter-options {
