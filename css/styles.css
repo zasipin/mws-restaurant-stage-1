@@ -361,18 +361,7 @@ header {
   #restaurants-list li {
     width: calc(100% - 50px); 
   }
-}
 
-@media screen and (max-width: 594px) {
-
-  .filter-options h2 {
-    padding-top: 8px;
-    width: 100%; 
-  }
-
-  nav h1 a {
-    letter-spacing: 5px;
-  }
   .inside {
     display: flex;
     flex-wrap: wrap;
@@ -400,6 +389,18 @@ header {
   .inside #reviews-container {
     padding-top: 10px; 
     width: calc(100% - 80px);
+  }
+}
+
+@media screen and (max-width: 594px) {
+
+  .filter-options h2 {
+    padding-top: 8px;
+    width: 100%; 
+  }
+
+  nav h1 a {
+    letter-spacing: 5px;
   }
 }
 
