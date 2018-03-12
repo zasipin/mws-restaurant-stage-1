@@ -384,10 +384,6 @@ header {
     flex-wrap: wrap;
   }
 
-  .inside #maincontent {
-    margin-top: 50px;
-  }
-
   .inside #map-container{
     order: -1;
     position: relative;
