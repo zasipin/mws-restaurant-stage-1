@@ -139,7 +139,7 @@ createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
   // TODO - add class to list item
-  li.classList.add(["reatsurant-item"]);
+  li.classList.add(["restaurant-item"]);
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
