@@ -162,7 +162,7 @@ nav h1 a:hover, nav h1 a:focus {
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
-  max-width: 1024px;
+  max-width: 1280px;
 }
 #restaurants-list li {
   background-color: #fff;
@@ -210,6 +210,9 @@ nav h1 a:hover, nav h1 a:focus {
   text-decoration: underline;
 }
 /* ====================== Restaurant Details ====================== */
+body {
+  background-color: #f3f3f3;
+}
 .inside header, 
 header {
   position: fixed;
@@ -220,6 +223,8 @@ header {
 .inside #maincontent {
   display: flex;
   flex-wrap: wrap;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 .inside #map-container {
   background: blue none repeat scroll 0 0;
@@ -237,11 +242,6 @@ header {
   height: 100%;
   width: 100%;
   margin: 0;
-}
-.inside #footer {
-  /* bottom: 0; */
-  /* position: absolute; */
-  /* width: 100%; */
 }
 #restaurant-name {
   color: #f18200;
