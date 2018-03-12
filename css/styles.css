@@ -399,6 +399,7 @@ header {
 
   .inside #restaurant-container, 
   .inside #reviews-container {
+    padding-top: 10px; 
     width: calc(100% - 80px);
   }
 }
