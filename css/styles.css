@@ -236,6 +236,7 @@ header {
   background-color: #ccc;
   height: 100%;
   width: 100%;
+  margin: 0;
 }
 .inside #footer {
   /* bottom: 0; */
