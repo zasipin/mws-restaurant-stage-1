@@ -361,6 +361,7 @@ header {
 @media screen and (max-width: 769px) {
   #restaurants-list li {
     width: 90%; 
+    width: calc(100% - 50px); 
   }
 }
 
