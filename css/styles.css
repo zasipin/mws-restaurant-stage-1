@@ -112,7 +112,6 @@ nav h1 a:hover, nav h1 a:focus {
     color: #01447e;
     text-decoration: underline;
 }
-
 #breadcrumb li:last-child {
   font-weight: bold;
 }
@@ -151,7 +150,6 @@ nav h1 a:hover, nav h1 a:focus {
   padding: 0 10px;
   width: 200px;
 }
-
 .filter-options select:focus, 
 .filter-options select:hover {
   box-shadow: #eee 0 0 1px 1px;
@@ -217,6 +215,9 @@ nav h1 a:hover, nav h1 a:focus {
   text-decoration: underline;
   outline: 0;
   box-shadow: #f55a00 0 0 3px;
+}
+#restaurants-list li .neighborhood {
+  font-size: 1.1em;
 }
 /* ====================== Restaurant Details ====================== */
 body {
