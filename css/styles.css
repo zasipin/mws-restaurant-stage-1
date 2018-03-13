@@ -245,13 +245,16 @@ header {
   /* position: fixed; */
   /* right: 0; */
   /* top: 80px; */
-  width: 50%;
+  width: 40%;
 }
 .inside #map {
   background-color: #ccc;
   height: 100%;
   width: 100%;
   margin: 0;
+}
+.inside .restaurant-info-container{
+  width: 60%;
 }
 #restaurant-name {
   color: #f18200;
@@ -298,9 +301,6 @@ header {
   font-weight: 300;
   letter-spacing: -1px;
   padding-bottom: 1pt;
-}
-.inside .restaurant-info-container{
-  width: 50%;
 }
 #reviews-list {
   margin: 0;
