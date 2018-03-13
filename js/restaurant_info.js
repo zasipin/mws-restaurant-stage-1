@@ -1,5 +1,5 @@
-let restaurant;
-var map;
+let restaurant,
+    map;
 
 /**
  * Initialize Google map, called from HTML.
@@ -92,11 +92,13 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
     const day = document.createElement('td');
     day.innerHTML = key;
     day.tabIndex = 0;
+    day.setAttribute('aria-label', 'day');
     row.appendChild(day);
 
     const time = document.createElement('td');
     time.innerHTML = operatingHours[key];
     time.tabIndex = 0;
+    time.setAttribute('aria-label', 'open hours');
     row.appendChild(time);
 
     hours.appendChild(row);
@@ -119,6 +121,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     return;
   }
   const ul = document.getElementById('reviews-list');
+  ul.setAttribute('aria-label', 'reviews list');
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
   });
@@ -130,6 +133,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
+  li.setAttribute('aria-label', 'review item');
   const article = document.createElement('article');
  
   const div = document.createElement('div');
@@ -137,22 +141,26 @@ createReviewHTML = (review) => {
   
   const date = document.createElement('p');
   date.innerHTML = review.date;
+  date.setAttribute('aria-label', 'review date');
   date.classList.add("comment-date");
   div.appendChild(date);
   
   const name = document.createElement('p');
   name.innerHTML = review.name;
+  name.setAttribute('aria-label', 'username');
   div.appendChild(name);
   article.appendChild(div);
   
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
   rating.classList.add("rating");
+  rating.setAttribute('aria-label', 'rating');
   article.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
   comments.classList.add("review");
+  comments.setAttribute('aria-label', 'review');
   article.appendChild(comments);
 
   li.appendChild(article);
@@ -167,6 +175,7 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;
+  li.setAttribute('aria-label', 'active page');
   breadcrumb.appendChild(li);
 }
 

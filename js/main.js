@@ -140,6 +140,7 @@ createRestaurantHTML = (restaurant) => {
 
   // TODO - add class to list item
   li.classList.add(["restaurant-item"]);
+  li.setAttribute('aria-label', 'restaurant item');
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
