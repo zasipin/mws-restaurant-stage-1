@@ -54,10 +54,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   name.tabIndex = 0;
 
   const address = document.getElementById('restaurant-address');
-  address.innerHTML = restaurant.address;
+  // address.innerHTML = restaurant.address;
+  address.appendChild(createAddressHTML(restaurant));
   address.tabIndex = 0;
-  address.setAttribute("role", "address");
-
+  
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
   image.alt = restaurant.photo_alt;
