@@ -152,9 +152,10 @@ createRestaurantHTML = (restaurant) => {
   image.srcset = `${imgSrc_266} 266w, ${imgSrc_430} 430w, ${imgSrc_800} 800w`;
   li.append(image);
 
-  const name = document.createElement('h1');
+  const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   name.tabIndex = 0;
+  name.setAttribute('aria-label', 'restaurant name');
   li.append(name);
 
   const neighborhood = document.createElement('p');
