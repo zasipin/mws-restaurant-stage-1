@@ -69,6 +69,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   
 
   const cuisine = document.getElementById('restaurant-cuisine');
+  cuisine.setAttribute('aria-label', 'restaurant cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
   cuisine.tabIndex = 0;
 

@@ -160,6 +160,7 @@ createRestaurantHTML = (restaurant) => {
   neighborhood.innerHTML = restaurant.neighborhood;
   neighborhood.classList.add("neighborhood");
   neighborhood.tabIndex = 0;
+  neighborhood.setAttribute('aria-label', 'Neighborhood');
   li.append(neighborhood);
 
   li.append(createAddressHTML(restaurant));
