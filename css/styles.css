@@ -82,7 +82,7 @@ nav h1 a:hover, nav h1 a:focus {
 #breadcrumb {
     padding: 10px 40px 10px;
     list-style: none;
-    background-color: #eee;
+    background-color: #ddd;
     font-size: 11pt;
     margin: 0;
     width: calc(100% - 80px);
