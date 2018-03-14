@@ -13,6 +13,7 @@ const createAddressHTML = (restaurant) => {
 
   div.append(address);
   return div;
+}
 /**
  * install service worker
  */

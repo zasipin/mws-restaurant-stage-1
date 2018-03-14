@@ -58,7 +58,7 @@ self.addEventListener('fetch', (evt) => {
   //  }
 
   evt.respondWith(
-    caches.match(evt.request).then((response) => {
+    caches.match(evt.request, {ignoreSearch: true}).then((response) => {
       // TODO - respond with cache data or fetch from network
       return response || 
         fetch(evt.request).then((resp) => {
