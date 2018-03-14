@@ -13,4 +13,11 @@ const createAddressHTML = (restaurant) => {
 
   div.append(address);
   return div;
+/**
+ * install service worker
+ */
+if(navigator.serviceWorker) {
+  navigator.serviceWorker.register('/sw.js').then((reg) => {
+    console.log("sw registered");
+  });
 }
