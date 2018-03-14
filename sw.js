@@ -3,6 +3,7 @@ const cacheNameCurrent = `${chacheNamePrefix}_v1.0`;
 const urlsToCache = [
                       '/',
                       '/restaurant.html',
+                      '/no_connection.html',
                       'js/main.js',
                       'js/common_functions.js',
                       'js/dbhelper.js',
@@ -36,7 +37,7 @@ self.addEventListener('activate', (evt) => {
 self.addEventListener('fetch', (evt) => {
   const requestUrl = new URL(evt.request.url);
 
-  
+
 
   evt.respondWith(
     caches.match(evt.request).then((response) => {
@@ -49,6 +50,9 @@ self.addEventListener('fetch', (evt) => {
             cache.put(evt.request, resp);
           });
           return resp.clone();
+        })
+        .catch((reject) => {
+          return caches.match('no_connection.html');
         });
     })
   );
