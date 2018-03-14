@@ -37,7 +37,25 @@ self.addEventListener('activate', (evt) => {
 self.addEventListener('fetch', (evt) => {
   const requestUrl = new URL(evt.request.url);
 
-
+  //  if( requestUrl.origin === location.origin && 
+  //      requestUrl.pathname.startsWith('/restaurant') ) {
+  //       const id = getParameterByName('id',requestUrl.url );
+  //       if (!id) { // no id found in URL
+  //         error = 'No restaurant id in URL'
+  //         callback(error, null);
+  //       } else {
+  //         DBHelper.fetchRestaurantById(id, (error, restaurant) => {
+  //           self.restaurant = restaurant;
+  //           if (!restaurant) {
+  //             console.error(error);
+  //             return;
+  //           }
+  //           fillRestaurantHTML();
+  //           callback(null, restaurant)
+  //         });
+  //       }
+  //    return caches.match('restaurant.html').then((response) => {});
+  //  }
 
   evt.respondWith(
     caches.match(evt.request).then((response) => {
