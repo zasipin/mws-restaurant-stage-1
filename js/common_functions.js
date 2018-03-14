@@ -14,11 +14,19 @@ const createAddressHTML = (restaurant) => {
   div.append(address);
   return div;
 }
+
 /**
- * install service worker
+ * TODO: install service worker
  */
 if(navigator.serviceWorker) {
   navigator.serviceWorker.register('/sw.js').then((reg) => {
     console.log("sw registered");
   });
 }
+
+/**
+ * TODO: remove markers from taborder
+ */
+window.addEventListener('load', () => {
+  document.querySelectorAll('#map area').forEach((el) => {el.setAttribute('tabindex', '-1')});
+});
