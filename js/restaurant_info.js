@@ -112,6 +112,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
+  title.setAttribute('tabindex', '0');
   container.appendChild(title);
 
   if (!reviews) {
@@ -120,21 +121,20 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     container.appendChild(noReviews);
     return;
   }
-  const ul = document.getElementById('reviews-list');
-  ul.setAttribute('aria-label', 'reviews list');
+  const divRL = document.getElementById('reviews-list');
+  divRL.setAttribute('aria-label', 'reviews list');
   reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
+    divRL.appendChild(createReviewHTML(review));
   });
-  container.appendChild(ul);
+  container.appendChild(divRL);
 }
 
 /**
  * Create review HTML and add it to the webpage.
  */
 createReviewHTML = (review) => {
-  const li = document.createElement('li');
-  li.setAttribute('aria-label', 'review item');
   const article = document.createElement('article');
+  article.setAttribute('aria-label', 'review item');
  
   const div = document.createElement('div');
   div.classList.add("list-header");
@@ -167,9 +167,7 @@ createReviewHTML = (review) => {
   comments.setAttribute('tabindex', '0');
   article.appendChild(comments);
 
-  li.appendChild(article);
-
-  return li;
+  return article;
 }
 
 /**

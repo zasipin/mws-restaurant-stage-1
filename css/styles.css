@@ -351,7 +351,6 @@ header {
   color: #f58500;
   font-size: 24pt;
   font-weight: 300;
-  letter-spacing: -1px;
   padding-bottom: 1pt;
 }
 
@@ -360,7 +359,7 @@ header {
   padding: 0;
 }
 
-#reviews-list li {
+#reviews-list article {
   background-color: #fff;
   box-shadow: #999 0px 0px 8px;
   display: block;
@@ -373,11 +372,11 @@ header {
   border-radius: 15px 0 0;
 }
 
-#reviews-list li p {
+#reviews-list article p {
   margin: 10px 0;
 }
 
-#reviews-list li .list-header {
+#reviews-list article .list-header {
   background-color: #333;
   margin-left: -20px;
   margin-top: 0px;
@@ -385,21 +384,21 @@ header {
   width: calc(100% + 20px);
 }
 
-#reviews-list li .list-header .comment-date {
+#reviews-list article .list-header .comment-date {
   margin-right: 20px;
 }
 
-#reviews-list li .list-header p {
+#reviews-list article .list-header p {
   color: white;
   font-weight: bold;
 }
 
-#reviews-list li .list-header p:first-child
+#reviews-list article .list-header p:first-child
 {
   float: right;
 }
 
-#reviews-list li .rating {
+#reviews-list article .rating {
   background-color: #f58500;
   border-radius: 3px;
   color: #fff;
@@ -409,7 +408,7 @@ header {
   width: 78px;  
 }
 
-#reviews-list li .review {
+#reviews-list article .review {
   color: #444;
 }
 
