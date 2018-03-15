@@ -24,7 +24,6 @@ window.initMap = () => {
  * Get current restaurant from page URL.
  */
 fetchRestaurantFromURL = (callback) => {
-  console.log('self: ', self);
   if (self.restaurant) { // restaurant already fetched!
     callback(null, self.restaurant)
     return;
