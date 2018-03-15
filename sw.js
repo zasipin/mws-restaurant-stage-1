@@ -1,14 +1,14 @@
 const chacheNamePrefix = 'udacity_restaurants';
-const cacheNameCurrent = `${chacheNamePrefix}_v1.0`;
+const cacheNameCurrent = `${chacheNamePrefix}_v1.2`;
 const urlsToCache = [
                       '/',
                       '/restaurant.html',
-                      '/no_connection.html',
                       'js/main.js',
                       'js/common_functions.js',
                       'js/dbhelper.js',
                       'js/restaurant_info.js',
-                      'css/styles.css'
+                      'css/styles.css',
+                      'data/restaurants.json'
                      ];
 const cacheFilterForDelete = (cacheName) => { return cacheName.startsWith(chacheNamePrefix) && cacheName !== cacheNameCurrent };                     
 
@@ -38,8 +38,9 @@ self.addEventListener('fetch', (evt) => {
   const requestUrl = new URL(evt.request.url);
   let matchOptions = {};
 
-  if( requestUrl.origin === location.origin && 
-      requestUrl.pathname.startsWith('/restaurant') ) {
+  // TODO - make reatsurants page live offline, ignore search string in url
+  if (requestUrl.origin === location.origin && 
+      requestUrl.pathname.startsWith('/restaurant')) {
     matchOptions.ignoreSearch = true;
   }
 
@@ -49,14 +50,10 @@ self.addEventListener('fetch', (evt) => {
       return response || 
         fetch(evt.request).then((resp) => {
           // TODO - save response for network request
-          //const respClone = resp.clone();
           caches.open(cacheNameCurrent).then((cache) => {
             cache.put(evt.request, resp);
           });
           return resp.clone();
-        })
-        .catch((reject) => {
-          return caches.match('no_connection.html');
         });
     })
   );
