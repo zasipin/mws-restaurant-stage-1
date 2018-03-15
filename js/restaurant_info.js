@@ -142,12 +142,14 @@ createReviewHTML = (review) => {
   const date = document.createElement('p');
   date.innerHTML = review.date;
   date.setAttribute('aria-label', 'review date');
+  date.setAttribute('tabindex', '0');
   date.classList.add("comment-date");
   div.appendChild(date);
   
   const name = document.createElement('p');
   name.innerHTML = review.name;
   name.setAttribute('aria-label', 'username');
+  name.setAttribute('tabindex', '0');
   div.appendChild(name);
   article.appendChild(div);
   
@@ -155,12 +157,14 @@ createReviewHTML = (review) => {
   rating.innerHTML = `Rating: ${review.rating}`;
   rating.classList.add("rating");
   rating.setAttribute('aria-label', 'rating');
+  rating.setAttribute('tabindex', '0');
   article.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
   comments.classList.add("review");
   comments.setAttribute('aria-label', 'review');
+  comments.setAttribute('tabindex', '0');
   article.appendChild(comments);
 
   li.appendChild(article);
