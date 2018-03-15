@@ -35,8 +35,16 @@ self.addEventListener('activate', (evt) => {
 });
 
 self.addEventListener('fetch', (evt) => {
+  const requestUrl = new URL(evt.request.url);
+  let matchOptions = {};
+
+  if( requestUrl.origin === location.origin && 
+      requestUrl.pathname.startsWith('/restaurant') ) {
+    matchOptions.ignoreSearch = true;
+  }
+
   evt.respondWith(
-    caches.match(evt.request, {ignoreSearch: true}).then((response) => {
+    caches.match(evt.request, matchOptions).then((response) => {
       // TODO - respond with cache data or fetch from network
       return response || 
         fetch(evt.request).then((resp) => {
