@@ -347,9 +347,9 @@ header {
   padding: 30px 40px 80px;
 }
 
-#reviews-container h2 {
+#reviews-container h3 {
   color: #f58500;
-  font-size: 24pt;
+  font-size: 18pt;
   font-weight: 300;
   padding-bottom: 1px;
 }
