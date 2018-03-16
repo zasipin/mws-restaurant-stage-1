@@ -1,5 +1,5 @@
 const chacheNamePrefix = 'udacity_restaurants';
-const cacheNameCurrent = `${chacheNamePrefix}_v1.2`;
+const cacheNameCurrent = `${chacheNamePrefix}_v1.3`;
 const urlsToCache = [
                       '/',
                       '/index.html',
