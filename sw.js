@@ -2,6 +2,7 @@ const chacheNamePrefix = 'udacity_restaurants';
 const cacheNameCurrent = `${chacheNamePrefix}_v1.2`;
 const urlsToCache = [
                       '/',
+                      '/index.html',
                       '/restaurant.html',
                       'js/main.js',
                       'js/common_functions.js',
@@ -10,12 +11,26 @@ const urlsToCache = [
                       'css/styles.css',
                       'data/restaurants.json'
                      ];
+                                
 const cacheFilterForDelete = (cacheName) => { return cacheName.startsWith(chacheNamePrefix) && cacheName !== cacheNameCurrent };                     
+const constructImagesArray = (prefix) => {
+  let images = [];
+  for(let i = 1; i <= 10; i++){
+    images.push(`${prefix}${i}.jpg`); 
+  }
+  return images;
+}
+
+const imagesToCache = constructImagesArray('/img/');
+const imagesToCache266 = constructImagesArray('/img/resized_266/');
+const imagesToCache430 = constructImagesArray('/img/resized_430/');
 
 self.addEventListener('install', (evt) => {
   evt.waitUntil(
     caches.open(cacheNameCurrent).then((cache) => {
-      return cache.addAll(urlsToCache);
+      return cache.addAll(urlsToCache).then(()=>{
+        return cache.addAll([...imagesToCache, ...imagesToCache430, ...imagesToCache266]);
+      });
     })
   );
 });
