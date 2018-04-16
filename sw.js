@@ -387,8 +387,7 @@ self.addEventListener('fetch', (evt) => {
         getAllRestaurants(openDb())
         .then((restaurants) => {
           if(restaurants && restaurants.length > 0 ){
-            let response = constructResponse(restaurants);
-            return response;        
+            return constructResponse(restaurants);
           } else {
             return fetchRestaurants(evt);
           }
@@ -398,15 +397,16 @@ self.addEventListener('fetch', (evt) => {
 
     if(singleRestaurantRequest){
       let restaurantId = getRestaurantIdFromUrl(requestUrl);
-      getRestaurantById(openDb(), restaurantId)
-      .then((restaurant) => {
-        if(restaurant){
-          let response = constructResponse(restaurant);
-          evt.respondWith(Promise.resolve(response));        
-        } else {
-          evt.respondWith(fetchRestaurants(evt));
-        }
-      });
+      evt.respondWith(
+        getRestaurantById(openDb(), restaurantId)
+        .then((restaurant) => {
+          if(restaurant){
+            return constructResponse(restaurant);        
+          } else {
+            return fetchRestaurants(evt);
+          }
+        })
+      );
     }
     return;
   }
@@ -451,15 +451,15 @@ function saveRestaurants(dbPromise, restaurants){
   })
 }
 
-function getRestaurantById(dbPromise, restaurantId){
-  let restaurants = [];
+function getRestaurantById(dbPromise, restaurantId){  
+  console.log('restaurant id: ', restaurantId);
   return dbPromise.then(db => { 
     let tx = db.transaction('restaurants');
     let store = tx.objectStore('restaurants');
     return store.get(restaurantId);
   })
   .then((restaurant) => {
-    return restaurants.push(res5taurant);
+    return restaurant;
   });
 }
 
@@ -504,6 +504,8 @@ function fetchRestaurants(evt){
     let restaurantsClonedResp = resp.clone();
     restaurantsClonedResp.json()
     .then(restaurants => {
+      if(!Array.isArray(restaurants)) 
+        saveRestaurants(openDb(), [restaurants]);
       saveRestaurants(openDb(), restaurants);
     });    
     return resp;
@@ -511,8 +513,9 @@ function fetchRestaurants(evt){
 }
 
 function getRestaurantIdFromUrl(requestUrl){
-  let segments = requestUrl.split('/');
-  return segments > 1 ? segments[1] : null;
+  console.log('requestUrl.pathname: ', requestUrl.pathname);
+  let segments = requestUrl.pathname.split('/');
+  return segments.length > 1 ? segments[2] : null;
 };
 
 function constructResponse(jsonData){
