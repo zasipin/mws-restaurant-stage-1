@@ -383,24 +383,26 @@ self.addEventListener('fetch', (evt) => {
 
   if(doNotCacheRestaurants){
     if(allRestaurantsRequest){
-      getAllRestaurants(openDb())
-      .then((restaurants) => {
-        if(restaurants && restaurants.length > 0 ){
-          let response = constructResponse(restaurants);
-          evt.respondWith(Promise.resolve(response));        
-        } else {
-          evt.respondWith(fetchRestaurants(evt));
-        }
-      });
+      evt.respondWith(
+        getAllRestaurants(openDb())
+        .then((restaurants) => {
+          if(restaurants && restaurants.length > 0 ){
+            let response = constructResponse(restaurants);
+            return response;        
+          } else {
+            return fetchRestaurants(evt);
+          }
+        })
+      );
     }
 
     if(singleRestaurantRequest){
       let restaurantId = getRestaurantIdFromUrl(requestUrl);
-      getRestaurantById(openDb(), )
+      getRestaurantById(openDb(), restaurantId)
       .then((restaurant) => {
         if(restaurant){
           let response = constructResponse(restaurant);
-          evt.respondWith(Promise.resolve(new Response(restaurant)));        
+          evt.respondWith(Promise.resolve(response));        
         } else {
           evt.respondWith(fetchRestaurants(evt));
         }
@@ -515,7 +517,7 @@ function getRestaurantIdFromUrl(requestUrl){
 
 function constructResponse(jsonData){
   let blob = new Blob([JSON.stringify(jsonData)], {type : 'application/json'});
-  let init = { "status" : 200 };
+  let init = { "status" : 200, "type": "json" };
          
   return new Response(blob, init); 
 }
