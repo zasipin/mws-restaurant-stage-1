@@ -418,18 +418,9 @@ self.addEventListener('fetch', (evt) => {
         fetch(evt.request).then((resp) => {
           // TODO - save response for network request
           let clonedResp = resp.clone();
-          // if(doNotCacheRestaurants) {
-          //   if(allRestaurantsRequest) {
-          //   // TODO: save restaurants request to DB
-          //     let restaurantsClonedResp = resp.clone();
-          //     saveRestaurants(openDb(), restaurantsClonedResp.json());
-          //   }
-          // } else {
             caches.open(cacheNameCurrent).then((cache) => {
               cache.put(evt.request, clonedResp);
             });
-          // }
-        
           return resp;
         });
     })
@@ -452,13 +443,14 @@ function saveRestaurants(dbPromise, restaurants){
 }
 
 function getRestaurantById(dbPromise, restaurantId){  
-  console.log('restaurant id: ', restaurantId);
+  // console.log('restaurant id: ', restaurantId);
   return dbPromise.then(db => { 
     let tx = db.transaction('restaurants');
     let store = tx.objectStore('restaurants');
-    return store.get(restaurantId);
+    return store.get(parseInt(restaurantId));
   })
   .then((restaurant) => {
+    console.log('found restaurant: ', restaurant);
     return restaurant;
   });
 }
