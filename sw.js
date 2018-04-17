@@ -505,6 +505,6 @@ function getRestaurantIdFromUrl(requestUrl){
 
 function constructResponse(jsonData){
   let blob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
-  let init = { "status": 200, "type": "json" };         
+  let init = { "status": 200 };         
   return new Response(blob, init); 
 }
