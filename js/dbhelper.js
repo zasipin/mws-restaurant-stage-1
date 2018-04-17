@@ -20,7 +20,6 @@ class DBHelper {
     fetch(`${DBHelper.DATABASE_URL}restaurants`)
       .then((resp) => resp.json())
       .then(restaurants => { 
-        console.log('fetchRestaurants called');
         callback(null, restaurants);
       })
       .catch(err => {

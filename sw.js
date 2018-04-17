@@ -443,15 +443,10 @@ function saveRestaurants(dbPromise, restaurants){
 }
 
 function getRestaurantById(dbPromise, restaurantId){  
-  // console.log('restaurant id: ', restaurantId);
   return dbPromise.then(db => { 
     let tx = db.transaction('restaurants');
     let store = tx.objectStore('restaurants');
     return store.get(parseInt(restaurantId));
-  })
-  .then((restaurant) => {
-    console.log('found restaurant: ', restaurant);
-    return restaurant;
   });
 }
 
@@ -490,7 +485,6 @@ function openDb(){
 function fetchRestaurants(evt){
   return fetch(evt.request).then((resp) => {
     // TODO - save response for network request
-    // console.log('restaurants response: ', resp);
     let clonedResp = resp.clone();
     // TODO: save restaurants request to DB
     let restaurantsClonedResp = resp.clone();
@@ -505,21 +499,12 @@ function fetchRestaurants(evt){
 }
 
 function getRestaurantIdFromUrl(requestUrl){
-  console.log('requestUrl.pathname: ', requestUrl.pathname);
   let segments = requestUrl.pathname.split('/');
   return segments.length > 1 ? segments[2] : null;
 };
 
 function constructResponse(jsonData){
-  let blob = new Blob([JSON.stringify(jsonData)], {type : 'application/json'});
-  let init = { "status" : 200, "type": "json" };
-         
+  let blob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
+  let init = { "status": 200, "type": "json" };         
   return new Response(blob, init); 
 }
-
-// let dbPromise = DBHelper.openDb();
-//     DBHelper.getRestaurantById(dbPromise, id).then(storedRestaurant => {
-//       if(!storedRestaurant) {
-
-  // let dbPromise = DBHelper.openDb();
-  // DBHelper.saveRestaurants(dbPromise, restaurants);
