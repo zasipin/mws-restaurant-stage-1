@@ -321,6 +321,7 @@ const urlsToCache = [
                       'css/styles.css'
                      ];
 const dBName = 'MWSRestaurants';                     
+const remoteAddr = 'http://localhost:1337';
                                 
 const cacheFilterForDelete = (cacheName) => { return cacheName.startsWith(chacheNamePrefix) && cacheName !== cacheNameCurrent };                     
 const constructImagesArray = (prefix) => {
@@ -334,12 +335,14 @@ const constructImagesArray = (prefix) => {
 const imagesToCache = constructImagesArray('/img/');
 const imagesToCache266 = constructImagesArray('/img/resized_266/');
 const imagesToCache430 = constructImagesArray('/img/resized_430/');
+const imagesToCache600 = constructImagesArray('/img/resized_600/');
 
 self.addEventListener('install', (evt) => {
   evt.waitUntil(
     caches.open(cacheNameCurrent).then((cache) => {
       return cache.addAll(urlsToCache).then(()=>{
         // return cache.addAll([...imagesToCache, ...imagesToCache430, ...imagesToCache266]);
+        return initRestaurants(remoteAddr);
       });
     })
   );
@@ -430,7 +433,7 @@ self.addEventListener('fetch', (evt) => {
 });
 
 function saveRestaurants(dbPromise, restaurants){
-  let tx = dbPromise.then(db => { 
+  let tx = dbPromise.then((db) => { 
     let tx = db.transaction('restaurants', 'readwrite');
     let store = tx.objectStore('restaurants');
     for(let restaurant of restaurants){
@@ -462,11 +465,17 @@ function getAllRestaurants(dbPromise){
     restaurants.push(cursor.value);
     return cursor.continue().then(readRestaurant);
   })
-  .then(() => restaurants);
+  .then(() => { 
+    console.log('get restaurants return', restaurants);
+    return restaurants; })
+  .catch((err) => { 
+    console.log('get restaurants error', err);
+    return restaurants;
+  });
 }
 
 function openDb(){
-  const dbPromise = idb.open(dBName, 1, upgradeDB => {
+  const dbPromise = idb.open(dBName, 1, (upgradeDB) => {
     // Note: we don't use 'break' in this switch statement,
     // the fall-through behaviour is what we want.
     switch (upgradeDB.oldVersion) {
@@ -489,13 +498,21 @@ function fetchRestaurants(evt){
     // TODO: save restaurants request to DB
     let restaurantsClonedResp = resp.clone();
     restaurantsClonedResp.json()
-    .then(restaurants => {
+    .then((restaurants) => {
+      console.log('saving restaurants: ', restaurants);
       if(!Array.isArray(restaurants)) 
         saveRestaurants(openDb(), [restaurants]);
       saveRestaurants(openDb(), restaurants);
     });    
     return resp;
   });
+}
+
+function initRestaurants(remoteAddr){
+  let evt = {
+    request: remoteAddr
+  }
+  return fetchRestaurants(evt);
 }
 
 function getRestaurantIdFromUrl(requestUrl){
