@@ -321,7 +321,7 @@ const urlsToCache = [
                       'css/styles.css'
                      ];
 const dBName = 'MWSRestaurants';                     
-const remoteAddr = 'http://localhost:1337';
+const remoteAddr = 'http://localhost:1337/restaurants';
                                 
 const cacheFilterForDelete = (cacheName) => { return cacheName.startsWith(chacheNamePrefix) && cacheName !== cacheNameCurrent };                     
 const constructImagesArray = (prefix) => {
@@ -503,6 +503,9 @@ function fetchRestaurants(evt){
       if(!Array.isArray(restaurants)) 
         saveRestaurants(openDb(), [restaurants]);
       saveRestaurants(openDb(), restaurants);
+    })
+    .catch((err) => {
+      console.log('Error fetching restaurants', err);
     });    
     return resp;
   });
@@ -512,6 +515,7 @@ function initRestaurants(remoteAddr){
   let evt = {
     request: remoteAddr
   }
+  console.log('initializing restaurants: ', evt);
   return fetchRestaurants(evt);
 }
 
@@ -522,6 +526,6 @@ function getRestaurantIdFromUrl(requestUrl){
 
 function constructResponse(jsonData){
   let blob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
-  let init = { "status": 200 };         
+  let init = { "status": 200, type: 'JSON' };         
   return new Response(blob, init); 
 }
