@@ -5,17 +5,22 @@
     {
       "src": "img/launcher-icon-1x.png",
       "type": "image/png",
-      "sizes": "48x48"
+      "sizes": "192x192"
     },
     {
       "src": "img/launcher-icon-2x.png",
       "type": "image/png",
-      "sizes": "96x96"
+      "sizes": "256x256"
     },
     {
       "src": "img/launcher-icon-4x.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "384x384"
+    },
+    {
+      "src": "img/launcher-icon-8x.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": "index.html",
