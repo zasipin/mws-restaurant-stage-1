@@ -1,0 +1,11 @@
+@media screen and (max-width: 594px) {
+  
+    .filter-options h2 {
+      padding-top: 8px;
+      width: 100%; 
+    }
+  
+    nav h1 a {
+      letter-spacing: 5px;
+    }
+  }
