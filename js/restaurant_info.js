@@ -16,6 +16,7 @@ window.initMap = () => {
       });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+      lazyLoadImages();
     }
   });
 }
@@ -59,15 +60,26 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   address.tabIndex = 0;
   
   const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img';
+  const photograph = restaurant.photograph;
+  restaurant.photograph = undefined;
+  image.classList.add('restaurant-img', 'lazy');
   image.alt = `${restaurant.name} restaurant photo`;
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  
   image.alt = restaurant.photo_alt;
-  const imgSrc_266 = DBHelper.imageUrlForRestaurant(restaurant, "resized_266/"); 
-  const imgSrc_430 = DBHelper.imageUrlForRestaurant(restaurant, "resized_430/"); 
-  const imgSrc_600 = DBHelper.imageUrlForRestaurant(restaurant, "resized_600/"); 
-  const imgSrc_800 = image.src; 
-  image.srcset = `${imgSrc_266} 266w, ${imgSrc_430} 430w, ${imgSrc_600} 600w, ${imgSrc_800} 800w`;  
+  let imgSrc_266 = DBHelper.imageUrlForRestaurant(restaurant, "resized_266/"); 
+  let imgSrc_430 = DBHelper.imageUrlForRestaurant(restaurant, "resized_430/"); 
+  let imgSrc_600 = DBHelper.imageUrlForRestaurant(restaurant, "resized_600/"); 
+  let imgSrc_650 = DBHelper.imageUrlForRestaurant(restaurant, "resized_650/"); 
+  let imgSrc_800 = DBHelper.imageUrlForRestaurant(restaurant); 
+  // TODO: Set dataset attributes
+  restaurant.photograph = photograph;
+  imgSrc_266 = DBHelper.imageUrlForRestaurant(restaurant, "resized_266/"); 
+  imgSrc_430 = DBHelper.imageUrlForRestaurant(restaurant, "resized_430/"); 
+  imgSrc_600 = DBHelper.imageUrlForRestaurant(restaurant, "resized_600/"); 
+  imgSrc_650 = DBHelper.imageUrlForRestaurant(restaurant, "resized_650/"); 
+  imgSrc_800 = DBHelper.imageUrlForRestaurant(restaurant); 
+  image.dataset.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.dataset.srcset = `${imgSrc_266} 266w, ${imgSrc_430} 430w, ${imgSrc_600} 600w, ${imgSrc_650} 650w, ${imgSrc_800} 800w`;  
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.setAttribute('aria-label', 'restaurant cuisine');

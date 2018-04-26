@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fetchCuisines();
 });
 
+window.addEventListener('load', () => {
+  loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
+});
+
 /**
  * Fetch all neighborhoods and set their HTML.
  */
@@ -71,16 +75,20 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
  * Initialize Google map, called from HTML.
  */
 window.initMap = () => {
-  let loc = {
-    lat: 40.722216,
-    lng: -73.987501
-  };
-  self.map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: loc,
-    scrollwheel: false
-  });
-  updateRestaurants();
+  let self = this;
+  setTimeout(()=>{
+    let loc = {
+      lat: 40.722216,
+      lng: -73.987501
+    };
+    self.map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 12,
+      center: loc,
+      scrollwheel: false
+    });
+    updateRestaurants();
+  }, 100);
+  
 }
 
 /**
@@ -102,8 +110,10 @@ updateRestaurants = () => {
     } else {
       resetRestaurants(restaurants);
       fillRestaurantsHTML();
+      lazyLoadImages();
     }
-  })
+  });
+  
 }
 
 /**
@@ -139,31 +149,38 @@ createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
   // TODO - add class to list item
-  li.classList.add(["restaurant-item"]);
+  li.classList.add("restaurant-item");
   li.setAttribute('aria-label', 'restaurant item');
-
-  
+ 
 
     const image = document.createElement('img');
     let photograph = restaurant.photograph;
     restaurant.photograph = undefined;
-    image.className = 'restaurant-img';
+    image.classList.add('restaurant-img','lazy');
     image.src = DBHelper.imageUrlForRestaurant(restaurant);
     image.alt = `${restaurant.name} restaurant photo`;
-    
-    li.append(image);
+    let imgSrc_266 = DBHelper.imageUrlForRestaurant(restaurant, "resized_266/"); 
+    let imgSrc_430 = DBHelper.imageUrlForRestaurant(restaurant, "resized_430/"); 
+    let imgSrc_600 = DBHelper.imageUrlForRestaurant(restaurant, "resized_600/"); 
+    let imgSrc_650 = DBHelper.imageUrlForRestaurant(restaurant, "resized_650/"); 
+    let imgSrc_800 = DBHelper.imageUrlForRestaurant(restaurant);
+    image.src = imgSrc_430;
+    image.srcset = `${imgSrc_266} 266w, ${imgSrc_430} 430w, ${imgSrc_600} 600w, ${imgSrc_650} 650w`;
+      
     restaurant.photograph = photograph;
-    setTimeout(()=>{
-      const imgSrc_266 = DBHelper.imageUrlForRestaurant(restaurant, "resized_266/"); 
-      const imgSrc_430 = DBHelper.imageUrlForRestaurant(restaurant, "resized_430/"); 
-      const imgSrc_600 = DBHelper.imageUrlForRestaurant(restaurant, "resized_600/"); 
-      const imgSrc_800 = DBHelper.imageUrlForRestaurant(restaurant);
-      image.src = imgSrc_430;
-      image.srcset = `${imgSrc_266} 266w, ${imgSrc_430} 430w, ${imgSrc_600} 600w, ${imgSrc_800} 800w`;
-      image.sizes = '(max-width: 769px) 100vw, (max-width: 1039px) 50vw, (min-width: 1040px) 30vw';
-    }, 300);
+    // setTimeout(()=>{
+      // TODO: set data for lazy loading
+      imgSrc_266 = DBHelper.imageUrlForRestaurant(restaurant, "resized_266/"); 
+      imgSrc_430 = DBHelper.imageUrlForRestaurant(restaurant, "resized_430/"); 
+      imgSrc_600 = DBHelper.imageUrlForRestaurant(restaurant, "resized_600/"); 
+      imgSrc_650 = DBHelper.imageUrlForRestaurant(restaurant, "resized_650/"); 
+      imgSrc_800 = DBHelper.imageUrlForRestaurant(restaurant);
+      image.dataset.src = imgSrc_430;
+      image.dataset.srcset = `${imgSrc_266} 266w, ${imgSrc_430} 430w, ${imgSrc_600} 600w, ${imgSrc_650} 650w`;
 
+    // }, 300);
 
+  li.append(image);
 
   const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
@@ -202,3 +219,28 @@ addMarkersToMap = (restaurants = self.restaurants) => {
   });
 }
 
+// function lazyLoadImages(){
+//   //  var lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+  
+//    // TODO: setup InersectionObserver for images
+//   if (window.IntersectionObserver) {
+//     let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+//       entries.forEach(function(entry) {
+//         if (entry.isIntersecting) {
+//           let lazyImage = entry.target;
+//           lazyImage.src = lazyImage.dataset.src;
+//           lazyImage.srcset = lazyImage.dataset.srcset;
+//           lazyImage.classList.remove("lazy");
+//           lazyImageObserver.unobserve(lazyImage);
+//         }
+//       });
+//     });
+    
+//     document.querySelectorAll("img.lazy").forEach(function(lazyImage) {
+//       lazyImageObserver.observe(lazyImage);
+//     });
+//   } else {
+//     // TODO: no IntersectObserver - fall back to a more compatible method here
+//  }
+
+// }

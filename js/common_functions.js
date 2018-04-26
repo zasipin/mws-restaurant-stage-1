@@ -30,3 +30,33 @@ if(navigator.serviceWorker) {
 window.addEventListener('load', () => {
   document.querySelectorAll('#map area').forEach((el) => {el.setAttribute('tabindex', '-1')});
 });
+
+function lazyLoadImages(){
+   // TODO: setup InersectionObserver for images
+  if (window.IntersectionObserver) {
+    let lazyImageObserver = new IntersectionObserver((images, observer) => {
+      images.forEach((image) => {
+        if (image.isIntersecting) {
+          let lazyImage = image.target;
+          lazyImage.src = lazyImage.dataset.src;
+          lazyImage.srcset = lazyImage.dataset.srcset;
+          lazyImage.classList.remove('lazy');
+          lazyImageObserver.unobserve(lazyImage);
+        }
+      });
+    });
+    
+    document.querySelectorAll("img.lazy").forEach((lazyImage) => {
+      lazyImageObserver.observe(lazyImage);
+    });
+  } else {
+    // TODO: no IntersectObserver - fall back to a more compatible method
+  }
+}
+
+function loadScript(source){
+  let script = document.createElement('script');
+  script.src = source;
+  // script.setAttribute('async', 'true');
+  document.body.appendChild(script);
+}
