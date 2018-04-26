@@ -31,7 +31,7 @@ a:hover, a:focus {
 }
 
 a img{
-	border: none 0px #fff;
+  border: none 0px #fff;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -209,7 +209,7 @@ nav h1 a:hover, nav h1 a:focus {
 }
 
 #restaurants-list .restaurant-img {
-  background-color: #ccc;
+  background-color: #fff;
   display: block;
   max-width: 100%;
 }
@@ -432,9 +432,7 @@ header {
 }
 
 @media screen and (max-width: 769px) {
-  #restaurants-list li {
-    width: calc(100% - 50px); 
-  }
+
 
   .inside {
     display: flex;
@@ -476,6 +474,10 @@ header {
 
   nav h1 a {
     letter-spacing: 5px;
+  }
+
+  #restaurants-list li {
+    width: calc(100% - 50px); 
   }
 }
 
