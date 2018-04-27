@@ -466,10 +466,10 @@ function getAllRestaurants(dbPromise){
     return cursor.continue().then(readRestaurant);
   })
   .then(() => { 
-    console.log('get restaurants return', restaurants);
+    // console.log('get restaurants return', restaurants);
     return restaurants; })
   .catch((err) => { 
-    console.log('get restaurants error', err);
+    // console.log('get restaurants error', err);
     return restaurants;
   });
 }
@@ -499,13 +499,13 @@ function fetchRestaurants(evt){
     let restaurantsClonedResp = resp.clone();
     restaurantsClonedResp.json()
     .then((restaurants) => {
-      console.log('saving restaurants: ', restaurants);
+      // console.log('saving restaurants: ', restaurants);
       if(!Array.isArray(restaurants)) 
         saveRestaurants(openDb(), [restaurants]);
       saveRestaurants(openDb(), restaurants);
     })
     .catch((err) => {
-      console.log('Error fetching restaurants', err);
+      // console.log('Error fetching restaurants', err);
     });    
     return resp;
   });
@@ -515,7 +515,7 @@ function initRestaurants(remoteAddr){
   let evt = {
     request: remoteAddr
   }
-  console.log('initializing restaurants: ', evt);
+  // console.log('initializing restaurants: ', evt);
   return fetchRestaurants(evt);
 }
 
