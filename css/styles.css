@@ -149,7 +149,7 @@ nav h1 a:hover, nav h1 a:focus {
 .filter-options {
   width: 100%;
   min-height: 50px;
-  background-color: #3397DB;
+  background-color: #2878af;
   align-items: center;
   display: flex;
   flex-wrap: wrap;
@@ -215,7 +215,7 @@ nav h1 a:hover, nav h1 a:focus {
 }
 
 #restaurants-list li h2 {
-  color: #f18200;
+  color: #a85b00;
   font-family: Arial,sans-serif;
   font-size: 14pt;
   font-weight: 200;
@@ -231,7 +231,7 @@ nav h1 a:hover, nav h1 a:focus {
 }
 
 #restaurants-list li a {
-  background-color: orange;
+  background-color: #a46a00;
   color: #fff;
   display: inline-block;
   font-size: 12pt;
@@ -244,7 +244,7 @@ nav h1 a:hover, nav h1 a:focus {
 
 #restaurants-list li a:hover, 
 #restaurants-list li a:focus {
-  background-color: #f55a00;
+  background-color: #664200;
   text-decoration: underline;
   outline: 0;
   box-shadow: #f55a00 0 0 3px;
