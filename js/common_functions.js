@@ -32,6 +32,10 @@ window.addEventListener('load', () => {
 });
 
 function lazyLoadImages(){
+  lazyLoad("img.lazy");
+}
+
+function lazyLoad(selector){
    // TODO: setup InersectionObserver for images
   if (window.IntersectionObserver) {
     let lazyImageObserver = new IntersectionObserver((images, observer) => {
@@ -46,7 +50,7 @@ function lazyLoadImages(){
       });
     });
     
-    document.querySelectorAll("img.lazy").forEach((lazyImage) => {
+    document.querySelectorAll(selector).forEach((lazyImage) => {
       lazyImageObserver.observe(lazyImage);
     });
   } else {
