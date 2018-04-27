@@ -1,6 +1,10 @@
 let restaurant,
     map;
 
+window.addEventListener('load', () => {
+  loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
+});
+
 /**
  * Initialize Google map, called from HTML.
  */
@@ -65,12 +69,13 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.classList.add('restaurant-img', 'lazy');
   image.alt = `${restaurant.name} restaurant photo`;
   
-  image.alt = restaurant.photo_alt;
   let imgSrc_266 = DBHelper.imageUrlForRestaurant(restaurant, "resized_266/"); 
   let imgSrc_430 = DBHelper.imageUrlForRestaurant(restaurant, "resized_430/"); 
   let imgSrc_600 = DBHelper.imageUrlForRestaurant(restaurant, "resized_600/"); 
   let imgSrc_650 = DBHelper.imageUrlForRestaurant(restaurant, "resized_650/"); 
   let imgSrc_800 = DBHelper.imageUrlForRestaurant(restaurant); 
+  image.src = imgSrc_430;
+  image.srcset = `${imgSrc_266} 266w, ${imgSrc_430} 430w, ${imgSrc_600} 600w, ${imgSrc_650} 650w`;
   // TODO: Set dataset attributes
   restaurant.photograph = photograph;
   imgSrc_266 = DBHelper.imageUrlForRestaurant(restaurant, "resized_266/"); 
