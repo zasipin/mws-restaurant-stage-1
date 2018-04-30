@@ -3,6 +3,9 @@ let restaurant,
 
 window.addEventListener('load', () => {
   loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
+  loadCss('css/styles.css');
+loadCss('css/styles_restaurant.css');
+loadCss('css/styles_media.css');
 });
 
 /**

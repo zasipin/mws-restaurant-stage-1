@@ -64,3 +64,11 @@ function loadScript(source){
   // script.setAttribute('async', 'true');
   document.body.appendChild(script);
 }
+
+function loadCss(hrefLink){
+  let css = document.createElement('link');
+  css.type = 'text/css';
+  css.rel = 'stylesheet';
+  css.href = hrefLink;
+  document.body.appendChild(css);
+}
