@@ -58,11 +58,14 @@ function lazyLoad(selector){
   }
 }
 
-function loadScript(source){
-  let script = document.createElement('script');
-  script.src = source;
-  // script.setAttribute('async', 'true');
-  document.body.appendChild(script);
+function loadScript(source, timeout){
+  setTimeout(function() {
+    let script = document.createElement('script');
+    script.src = source;
+    // script.setAttribute('async', 'true');
+    document.body.appendChild(script);
+  }, timeout || 10);
+  
 }
 
 function loadCss(hrefLink){
