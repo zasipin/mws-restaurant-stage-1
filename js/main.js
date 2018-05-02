@@ -8,15 +8,24 @@ var map,
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  fetchNeighborhoods();
-  fetchCuisines();
-});
-
-window.addEventListener('load', () => {
-  loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
+  loadCss('https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css');
   loadCss('css/styles.css');
   loadCss('css/styles_main.css');
   loadCss('css/styles_media.css');
+
+
+  fetchNeighborhoods();
+  fetchCuisines();
+
+  // updateRestaurants();
+});
+
+window.addEventListener('load', () => {
+  
+  loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
+  
+  
+  // loadCss('//normalize-css.googlecode.com/svn/trunk/normalize.css');
 });
 
 /**
