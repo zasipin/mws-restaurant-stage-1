@@ -101,8 +101,8 @@ nav h1 a:hover, nav h1 a:focus {
 #map {
   height: 400px;
   width: 100%;
-  background-color: #ccc;
-  /* margin-top: 80px; */
+  background-color: #f3f3f3;
+  margin-top: 80px;
 }
 
 
