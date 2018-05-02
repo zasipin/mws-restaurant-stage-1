@@ -59,12 +59,12 @@ function lazyLoad(selector){
 }
 
 function loadScript(source, timeout){
-  setTimeout(function() {
+  // setTimeout(function() {
     let script = document.createElement('script');
     script.src = source;
     // script.setAttribute('async', 'true');
     document.body.appendChild(script);
-  }, timeout || 10);
+  // }, timeout || 10);
   
 }
 
@@ -73,5 +73,5 @@ function loadCss(hrefLink){
   css.type = 'text/css';
   css.rel = 'stylesheet';
   css.href = hrefLink;
-  document.body.appendChild(css);
+  document.head.appendChild(css);
 }
