@@ -1,9 +1,10 @@
-let restaurants,
+let restaurants = [],
   neighborhoods,
   cuisines;
 var map,
     markers = [];
 
+    
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
@@ -88,7 +89,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
  */
 window.initMap = () => {
   let self = this;
-  setTimeout(()=>{
+  // setTimeout(()=>{
     let loc = {
       lat: 40.722216,
       lng: -73.987501
@@ -98,9 +99,18 @@ window.initMap = () => {
       center: loc,
       scrollwheel: false
     });
-    updateRestaurants();
-  }, 100);
+    // updateRestaurants();
+    updateMap();
+  // }, 100);
   
+}
+
+function updateMap(){
+    // Remove all map markers
+    self.markers.forEach(m => m.setMap(null));
+    self.markers = [];
+
+    addMarkersToMap();
 }
 
 /**
@@ -122,8 +132,9 @@ updateRestaurants = () => {
     } else {
       resetRestaurants(restaurants);
       fillRestaurantsHTML();
-      lazyLoadImages();
+      
     }
+    lazyLoadImages();
   });
   
 }
@@ -256,3 +267,5 @@ addMarkersToMap = (restaurants = self.restaurants) => {
 //  }
 
 // }
+
+updateRestaurants();
