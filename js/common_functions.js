@@ -34,8 +34,8 @@ window.addEventListener('load', () => {
   
   setTimeout(function(){
     if (mapLoaded) return;
-    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
-    mapLoaded = true;
+      mapLoaded = true;
+      loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");    
   }, 100);
   
 });
@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 function loadMapScript(evt){
   if(!mapLoaded){
-    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
     mapLoaded = true;
+    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
   }
   evt.target.removeEventListener(evt.type, loadMapScript);
 }
