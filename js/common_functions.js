@@ -1,3 +1,5 @@
+let mapLoaded = false;
+
 /**
  * Create address markup
  */
@@ -29,6 +31,13 @@ if(navigator.serviceWorker) {
  */
 window.addEventListener('load', () => {
   document.querySelectorAll('#map area').forEach((el) => {el.setAttribute('tabindex', '-1')});
+  
+  setTimeout(function(){
+    if (mapLoaded) return;
+    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
+    mapLoaded = true;
+  }, 100);
+  
 });
 
 document.addEventListener('DOMContentLoaded', (event) => {

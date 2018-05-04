@@ -1,7 +1,6 @@
 let restaurants = [],
   neighborhoods,
-  cuisines, 
-  mapLoaded = false;
+  cuisines;
 var map,
     markers = []
     ;
