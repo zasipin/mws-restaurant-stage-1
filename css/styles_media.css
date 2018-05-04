@@ -73,8 +73,8 @@
 
 @media screen and (max-width: 370px) {
   nav h1 a {
-    font-size: 1em;
-    line-height: 1.7;
+    font-size: 0.9em;
+    line-height: 1.2;
   }
 
 }

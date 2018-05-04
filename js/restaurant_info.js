@@ -7,7 +7,7 @@ window.addEventListener('load', () => {
   loadCss('css/styles.css');
   loadCss('css/styles_restaurant.css');
   loadCss('css/styles_media.css');
-  loadCss('//normalize-css.googlecode.com/svn/trunk/normalize.css');
+  // loadCss('//normalize-css.googlecode.com/svn/trunk/normalize.css');
 });
 
 /**

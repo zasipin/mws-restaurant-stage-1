@@ -2,7 +2,7 @@
 .filter-options {
   width: 100%;
   min-height: 50px;
-  background-color: #2878af;
+  background-color: #3397DB;
   align-items: center;
   display: flex;
   flex-wrap: wrap;
@@ -36,7 +36,6 @@
   outline: 0;
 }
 
-
 /* ====================== Restaurant Listing ====================== */
 #restaurants-list {
   background-color: #f3f3f3;
@@ -62,13 +61,13 @@
 }
 
 #restaurants-list .restaurant-img {
-  background-color: #fff;
+  background-color: #ccc;
   display: block;
   max-width: 100%;
 }
 
 #restaurants-list li h2 {
-  color: #a85b00;
+  color: #f18200;
   font-family: Arial,sans-serif;
   font-size: 14pt;
   font-weight: 200;
@@ -84,7 +83,7 @@
 }
 
 #restaurants-list li a {
-  background-color: #a46a00;
+  background-color: orange;
   color: #fff;
   display: inline-block;
   font-size: 12pt;
@@ -97,7 +96,7 @@
 
 #restaurants-list li a:hover, 
 #restaurants-list li a:focus {
-  background-color: #664200;
+  background-color: #f55a00;
   text-decoration: underline;
   outline: 0;
   box-shadow: #f55a00 0 0 3px;

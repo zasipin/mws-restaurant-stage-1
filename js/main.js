@@ -10,7 +10,7 @@ var map,
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  loadCss('https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css');
+  // loadCss('https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css');
   loadCss('css/styles.css');
   loadCss('css/styles_main.css');
   loadCss('css/styles_media.css');
