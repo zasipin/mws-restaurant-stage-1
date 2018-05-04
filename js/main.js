@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
   loadCss('css/styles_main.css');
   loadCss('css/styles_media.css');
 
-  let mapElement = document.getElementById('map');
-  mapElement.addEventListener('click', loadMapScript);
-  document.body.addEventListener('mouseover', loadMapScript);
-  document.body.addEventListener('scroll', loadMapScript);
+  // let mapElement = document.getElementById('map');
+  // mapElement.addEventListener('click', loadMapScript);
+  // document.body.addEventListener('mouseover', loadMapScript);
+  // document.body.addEventListener('scroll', loadMapScript);
 
   fetchNeighborhoods();
   fetchCuisines();
@@ -27,13 +27,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
   // updateRestaurants();
 });
 
-function loadMapScript(evt){
-  if(!mapLoaded){
-    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
-    mapLoaded = true;
-  }
-  evt.target.removeEventListener(evt.type, loadMapScript);
-}
+// function loadMapScript(evt){
+//   if(!mapLoaded){
+//     loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
+//     mapLoaded = true;
+//   }
+//   evt.target.removeEventListener(evt.type, loadMapScript);
+// }
 
 window.addEventListener('load', () => {
   

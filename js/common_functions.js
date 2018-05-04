@@ -31,6 +31,21 @@ window.addEventListener('load', () => {
   document.querySelectorAll('#map area').forEach((el) => {el.setAttribute('tabindex', '-1')});
 });
 
+document.addEventListener('DOMContentLoaded', (event) => {
+  let mapElement = document.getElementById('map');
+  mapElement.addEventListener('click', loadMapScript);
+  document.body.addEventListener('mouseover', loadMapScript);
+  document.body.addEventListener('scroll', loadMapScript);
+});
+
+function loadMapScript(evt){
+  if(!mapLoaded){
+    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
+    mapLoaded = true;
+  }
+  evt.target.removeEventListener(evt.type, loadMapScript);
+}
+
 function lazyLoadImages(){
   lazyLoad("img.lazy");
 }
