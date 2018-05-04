@@ -1,12 +1,14 @@
 let restaurant,
     map;
 
-window.addEventListener('load', () => {
-  loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
-  
+document.addEventListener('DOMContentLoaded', () => {
   loadCss('css/styles.css');
   loadCss('css/styles_restaurant.css');
   loadCss('css/styles_media.css');
+});
+
+window.addEventListener('load', () => {
+  loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
   // loadCss('//normalize-css.googlecode.com/svn/trunk/normalize.css');
 });
 
@@ -14,20 +16,17 @@ window.addEventListener('load', () => {
  * Initialize Google map, called from HTML.
  */
 window.initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-      lazyLoadImages();
-    }
+  if (!self.restaurant) {
+    return;
+  }
+  self.map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 16,
+    center: self.restaurant.latlng,
+    scrollwheel: false
   });
+  DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+
+  lazyLoadImages();
 }
 
 /**
@@ -220,3 +219,13 @@ getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+fetchRestaurantFromURL((error, restaurant) => {
+  if (error) { // Got an error!
+    console.error(error);
+  } else {
+    fillBreadcrumb(); 
+    lazyLoadImages();
+  }
+});
+
