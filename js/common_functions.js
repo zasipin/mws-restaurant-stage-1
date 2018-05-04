@@ -62,20 +62,20 @@ function lazyLoadImages(){
 function lazyLoad(selector){
    // TODO: setup InersectionObserver for images
   if (window.IntersectionObserver) {
-    let lazyImageObserver = new IntersectionObserver((images, observer) => {
-      images.forEach((image) => {
-        if (image.isIntersecting) {
-          let lazyImage = image.target;
-          lazyImage.src = lazyImage.dataset.src;
-          lazyImage.srcset = lazyImage.dataset.srcset;
-          lazyImage.classList.remove('lazy');
-          lazyImageObserver.unobserve(lazyImage);
+    let lazyItemsObserver = new IntersectionObserver((items, observer) => {
+      items.forEach((item) => {
+        if (item.isIntersecting) {
+          let lazyItem = item.target;
+          lazyItem.src = lazyItem.dataset.src;
+          lazyItem.srcset = lazyItem.dataset.srcset;
+          lazyItem.classList.remove('lazy');
+          lazyItemsObserver.unobserve(lazyItem);
         }
       });
     });
     
-    document.querySelectorAll(selector).forEach((lazyImage) => {
-      lazyImageObserver.observe(lazyImage);
+    document.querySelectorAll(selector).forEach((lazyItem) => {
+      lazyItemsObserver.observe(lazyItem);
     });
   } else {
     // TODO: no IntersectObserver - fall back to a more compatible method
