@@ -8,6 +8,169 @@
   <title>Restaurant Reviews</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta htt-equiv=”Content-Type” content=”text/html” charset=”utf-8”>
+  <style>
+    @charset "utf-8";
+/* CSS Document */
+
+body,td,th,p{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+	color: #333;
+	line-height: 1.5;
+}
+
+body {
+	background-color: #f3f3f3;
+	margin: 0;
+	position:relative;
+}
+
+ul, li {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+	color: #333;
+}
+
+a {
+	color: orange;
+	text-decoration: none;
+}
+
+a:hover, a:focus {
+	color: #3397db;
+	text-decoration: none;
+}
+
+a img{
+	border: none 0px #fff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0 0 20px;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+#maincontent {
+  background-color: #f3f3f3;
+  min-height: 100%; 
+}
+
+#footer {
+  background-color: #444;
+  color: #eee;
+  font-size: 9pt;
+  letter-spacing: 1px;
+  padding: 25px 10px;
+  text-align: center;
+  text-transform: uppercase;
+  width: calc(100% - 20px);
+}
+
+
+#footer a:hover,
+#footer a:focus {
+  text-decoration: underline;
+}
+
+/* ====================== Navigation ====================== */
+nav {
+  width: 100%;
+  height: 80px;
+  background-color: #252831;
+}
+
+nav h1 {
+  margin: auto;
+  text-align:center;
+}
+
+nav h1 a {
+  color: #fff;
+  /* font-size: 14pt; */
+  font-weight: 200;
+  letter-spacing: 10px;
+  text-transform: uppercase;
+  line-height: 3.2;
+}
+
+nav h1 a span{
+  letter-spacing: 0;
+}
+
+nav h1 a:hover, nav h1 a:focus {
+  text-decoration: underline;
+  color: #ddd;
+}
+
+#breadcrumb {
+    padding: 10px 40px 10px;
+    list-style: none;
+    background-color: #ddd;
+    font-size: 11pt;
+    margin: 0;
+    width: calc(100% - 80px);
+}
+
+
+/* Display list items side by side */
+#breadcrumb li {
+    display: inline;
+}
+
+
+/* Add a slash symbol (/) before/behind each list item */
+#breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+}
+
+
+/* Add a color to all links inside the list */
+#breadcrumb li a {
+    color: #0275d8;
+    text-decoration: none;
+}
+
+
+/* Add a color on mouse-over */
+#breadcrumb li a:hover, 
+#breadcrumb li a:focus {
+    color: #01447e;
+    text-decoration: underline;
+}
+
+#breadcrumb li:last-child {
+  font-weight: bold;
+}
+
+/* ====================== Map ====================== */
+#map {
+  height: 400px;
+  width: 100%;
+  background-color: #ccc;
+  margin-top: 80px;
+}
+
+/* ============= No connection ================ */
+.no-connection {
+  margin-top: 120px;
+  padding: 0 0 0 20px;
+  height: calc(100vh - 188px);
+}
+
+  </style>
 </head>
 
 <body>
