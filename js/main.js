@@ -11,17 +11,17 @@ var map,
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   // loadCss('https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css');
-  loadCss('css/styles.css');
-  loadCss('css/styles_main.css');
-  loadCss('css/styles_media.css');
+  // loadCss('css/styles.css');
+  // loadCss('css/styles_main.css');
+  // loadCss('css/styles_media.css');
 
   // let mapElement = document.getElementById('map');
   // mapElement.addEventListener('click', loadMapScript);
   // document.body.addEventListener('mouseover', loadMapScript);
   // document.body.addEventListener('scroll', loadMapScript);
 
-  fetchNeighborhoods();
-  fetchCuisines();
+  // fetchNeighborhoods();
+  // fetchCuisines();
 
   // updateRestaurants();
 });
@@ -37,7 +37,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 window.addEventListener('load', () => {
   
   // loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
+  // loadCss('css/styles.css');
+  loadCss('css/styles_main.css');
+  loadCss('css/styles_media.css');
   
+  fetchNeighborhoods();
+  fetchCuisines();
 });
 
 /**
