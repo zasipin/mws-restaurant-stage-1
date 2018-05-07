@@ -2,12 +2,14 @@ let restaurant,
     map;
 
 document.addEventListener('DOMContentLoaded', () => {
-  loadCss('css/styles.css');
-  loadCss('css/styles_restaurant.css');
-  loadCss('css/styles_media.css');
+  // loadCss('css/styles.css');
+
 });
 
 window.addEventListener('load', () => {
+  loadCss('css/styles_restaurant.css');
+  loadCss('css/styles_media.css');
+  
   loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
   // loadCss('//normalize-css.googlecode.com/svn/trunk/normalize.css');
 });
