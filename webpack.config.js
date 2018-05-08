@@ -18,7 +18,8 @@ module.exports = {
     vendor: ['./js/common_functions.js', './js/db_helper.js'],
     main: './js/main.js', 
     restaurant: './js/restaurant_info.js', 
-    styles: './css/styles.css'
+    styles_main: ['./css/styles_main.css', './css/styles_media.css'],
+    styles_restaurant: ['./css/styles_restaurant.css', './css/styles_media.css']
   },
   plugins: [
     new CleanWebpackPlugin(['public'], {
@@ -26,7 +27,7 @@ module.exports = {
       }
     ),
 
-    new ExtractTextPlugin("[name].styles.css"),
+    new ExtractTextPlugin("[name].css"),
 
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
