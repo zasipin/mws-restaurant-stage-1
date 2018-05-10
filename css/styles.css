@@ -152,7 +152,7 @@ nav h1 a:hover, nav h1 a:focus {
   margin-top: 80px;
 }
 
-#map::before{
+#map::before {
   content: "Click to load map";
   font-size: 2em;
   text-align: center;

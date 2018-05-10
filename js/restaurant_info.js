@@ -1,18 +1,13 @@
 let restaurant,
     map;
 
-document.addEventListener('DOMContentLoaded', () => {
-  // loadCss('css/styles.css');
-
-});
+// document.addEventListener('DOMContentLoaded', () => {
+// });
 
 window.addEventListener('load', () => {
-  // loadCss('css/styles_restaurant.css');
-  // loadCss('css/styles_media.css');
   loadCss('public/styles_restaurant.css');
 
-  loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
-  
+  // loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");
 });
 
 /**

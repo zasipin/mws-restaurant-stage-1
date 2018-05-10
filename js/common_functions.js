@@ -36,22 +36,11 @@ window.addEventListener('load', () => {
   mapElement.addEventListener('click', loadMapScript);
   document.body.addEventListener('mouseover', loadMapScript);
   document.body.addEventListener('scroll', loadMapScript);
-
-  // loadMapScript();
-  // setTimeout(function(){
-  //   if (mapLoaded) return;
-  //     mapLoaded = true;
-      // loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBVCrR9mb9pJ_ep5aiC7q0KBYs6SJThzb0&libraries=places&callback=initMap");    
-  // }, 100);
-  
 });
 
-console.log('line before DOMContentLoaded event handler');
-
-document.addEventListener('DOMContentLoaded', (event) => {
-  // console.log('add DOMContentLoaded event handler');
-  
-});
+// document.addEventListener('DOMContentLoaded', (event) => {
+ 
+// });
 
 function loadMapScript(evt){
   if(!mapLoaded){
