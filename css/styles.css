@@ -148,10 +148,17 @@ nav h1 a:hover, nav h1 a:focus {
 #map {
   height: 400px;
   width: 100%;
-  background-color: #ccc;
+  background-color: #f3f3f3;
   margin-top: 80px;
 }
 
+#map::before{
+  content: "Click to load map";
+  font-size: 2em;
+  text-align: center;
+  line-height: 400px;
+  margin: 0 calc(50% - 130px) ;
+}
 /* ============= No connection ================ */
 .no-connection {
   margin-top: 120px;

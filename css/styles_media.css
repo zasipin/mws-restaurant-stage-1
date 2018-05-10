@@ -92,4 +92,10 @@
   #restaurants-list {
     padding: 0 10px 0 0;
   }
+
+  #map::before {
+    content: "Click to load map";
+    font-size: 1.4em;
+    margin: 0 calc(50% - 90px) ;
+  }  
 }
