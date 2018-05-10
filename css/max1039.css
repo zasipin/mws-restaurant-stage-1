@@ -1,6 +1,0 @@
-@media screen and (max-width: 1039px) {
-    #restaurants-list li {
-      width: calc(50% - 74px);  
-    }
-  }
-  
