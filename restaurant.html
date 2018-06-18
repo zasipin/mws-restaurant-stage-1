@@ -217,6 +217,24 @@
       <!-- end restaurant -->
       <!-- Beginning reviews -->
       <section id="reviews-container" aria-label="reviews">
+        <form id='review-form'>
+          <input type="hidden" name="restaurant_id">
+          <p>
+          <label for="username-input" class="form-label">Username:</label>          
+          <input type="text" name="name" id="name-input" class="form-input">
+          </p>       
+
+          <p>
+          <label for="username-input">Rating:</label>                    
+          <input type="text" name="rating" id="rating-input">
+          </p>
+
+          <p>
+          <label for="comments-input">Review comments:</label>                    
+          <textarea name="comments" id="comments-input" rows="4"></textarea>
+          </p>
+          <button>Save</button>
+        </form>
         <div id="reviews-list"></div>
       </section>
       <!-- End reviews -->
