@@ -447,16 +447,17 @@ self.addEventListener('fetch', (evt) => {
 });
 
 function saveRestaurants(dbPromise, restaurants){
-  let tx = dbPromise.then((db) => { 
-    let tx = db.transaction('restaurants', 'readwrite');
-    let store = tx.objectStore('restaurants');
-    for(let restaurant of restaurants){
-      store.get(restaurant.id).then(val => {
-        if(!val)
-          store.put(restaurant);
-      })
-    }
-  })
+  saveItems(dbPromise, reviews, 'restaurants');
+  // let tx = dbPromise.then((db) => { 
+  //   let tx = db.transaction('restaurants', 'readwrite');
+  //   let store = tx.objectStore('restaurants');
+  //   for(let restaurant of restaurants){
+  //     store.get(restaurant.id).then(val => {
+  //       if(!val)
+  //         store.put(restaurant);
+  //     })
+  //   }
+  // })
 }
 
 function getRestaurantById(dbPromise, restaurantId){  
@@ -550,17 +551,22 @@ function fetchReviewsFromServer(evt){
 }
 
 function saveReviews(dbPromise, reviews){
+  saveItems(dbPromise, reviews, 'reviews');
+}
+
+function saveItems(dbPromise, items, entity){
   let tx = dbPromise.then((db) => { 
-    let tx = db.transaction('reviews', 'readwrite');
-    let store = tx.objectStore('reviews');
-    for(let review of reviews){
+    let tx = db.transaction(entity, 'readwrite');
+    let store = tx.objectStore(entity);
+    for(let review of items){
       store.get(review.id).then(val => {
         if(!val)
           store.put(review);
       })
     }
-  })
+  });
 }
+
 
 function initRestaurants(remoteAddr){
   let evt = {
