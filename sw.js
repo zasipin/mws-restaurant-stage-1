@@ -397,7 +397,7 @@ self.addEventListener('fetch', (evt) => {
         })
       );
     }
-
+    
     if(singleRestaurantRequest){
       let restaurantId = getRestaurantIdFromUrl(requestUrl);
       evt.respondWith(
@@ -412,6 +412,11 @@ self.addEventListener('fetch', (evt) => {
       );
     }
     return;
+  }
+
+  if (requestUrl.origin !== location.origin && 
+    requestUrl.pathname.startsWith('/reviews')) {
+      return fetchReviews(evt);
   }
 
   evt.respondWith(
@@ -510,6 +515,42 @@ function fetchRestaurants(evt){
     });    
     return resp;
   });
+}
+
+
+function fetchReviews(evt){
+  console.log(evt);
+  if(evt.request.method === 'GET'){
+    return fetch(evt.request).then((resp) => {
+      // TODO - save response for network request
+      // TODO: save restaurants request to DB
+      let reviewClonedResp = resp.clone();
+      reviewClonedResp.json()
+      .then((reviews) => {
+        // console.log('saving restaurants: ', restaurants);
+        if(!Array.isArray(reviews)) 
+          saveReviews(openDb(), [reviews]);
+        saveReviews(openDb(), reviews);
+      })
+      .catch((err) => {
+        // console.log('Error fetching restaurants', err);
+      });    
+      return resp;
+    });
+  }
+}
+
+function saveReviews(dbPromise, reviews){
+  let tx = dbPromise.then((db) => { 
+    let tx = db.transaction('reviews', 'readwrite');
+    let store = tx.objectStore('reviews');
+    for(let review of reviews){
+      store.get(review.id).then(val => {
+        if(!val)
+          store.put(review);
+      })
+    }
+  })
 }
 
 function initRestaurants(remoteAddr){
