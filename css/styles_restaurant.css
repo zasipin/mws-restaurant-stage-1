@@ -79,6 +79,10 @@ header {
   width: 60%;
 }
 
+#reviews-container h3{
+  color: #d57300;
+}
+
 #restaurant-name {
   color: #f18200;
   font-family: Arial,sans-serif;
@@ -176,7 +180,7 @@ header {
 }
 
 #reviews-list article .rating {
-  background-color: #f58500;
+  background-color: #b56000;
   border-radius: 3px;
   color: #fff;
   font-weight: bold;
