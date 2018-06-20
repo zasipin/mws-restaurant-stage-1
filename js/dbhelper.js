@@ -180,5 +180,28 @@ class DBHelper {
        callback(error, null);
      });
  }
+
+  /**
+  * Fetch all reviews.
+  */
+ static saveReviewForRestaurant(reviewOjb, callback) {
+
+  fetch(`${DBHelper.DATABASE_URL}reviews`, {
+    method: 'POST',
+    header: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(reviewOjb)
+  })
+    .then((resp) => resp.json())
+    .then(resp => { 
+      callback(null, resp);
+    })
+    .catch(err => {
+      const error = (`Request failed. Returned status of ${err.status}`);
+      callback(error, null);
+    });
+}
 }
 

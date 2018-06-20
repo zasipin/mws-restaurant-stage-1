@@ -148,7 +148,8 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.reviews) => {
 
-  // let reviews = getRestaurantReviews(self.restaurant);
+  // add form events listener
+  addFormEventListener();
 
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h3');
@@ -181,7 +182,7 @@ createReviewHTML = (review) => {
   div.classList.add("list-header");
   
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  date.innerHTML = (new Date(review.updatedAt)).toDateString();
   date.setAttribute('aria-label', 'review date');
   date.setAttribute('tabindex', '0');
   date.classList.add("comment-date");
@@ -210,6 +211,24 @@ createReviewHTML = (review) => {
 
   return article;
 }
+
+function addFormEventListener(){
+  const formR = document.getElementById('review-form');
+  formR.addEventListener('submit', (event)=>{
+    event.preventDefault();
+    let elems = event.target.elements;
+    let review = {
+      "restaurant_id": this.restaurant.id,
+      "name": elems.name.value,
+      "rating": elems.rating.value,
+      "comments": elems.comments.value
+    };
+    DBHelper.saveReviewForRestaurant(review, (err, response)=>{
+      console.log(response);
+    });
+  })
+};
+
 
 /**
  * Add restaurant name to the breadcrumb navigation menu
