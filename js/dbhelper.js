@@ -164,5 +164,21 @@ class DBHelper {
     return marker;
   }
 
+
+  /**
+  * Fetch all reviews.
+  */
+ static fetchReviewsForRestaurant(id, callback) {
+
+   fetch(`${DBHelper.DATABASE_URL}reviews/?restaurant_id=${id}`)
+     .then((resp) => resp.json())
+     .then(reviews => { 
+       callback(null, reviews);
+     })
+     .catch(err => {
+       const error = (`Request failed. Returned status of ${err.status}`);
+       callback(error, null);
+     });
+ }
 }
 
