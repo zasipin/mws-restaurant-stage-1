@@ -387,12 +387,12 @@ self.addEventListener('fetch', (evt) => {
   if(doNotCacheRestaurants){
     if(allRestaurantsRequest){
       evt.respondWith(
-        getAllRestaurants(openDb())
+        getAllDataFromLocalDB(openDb())
         .then((restaurants) => {
           if(restaurants && restaurants.length > 0 ){
             return constructResponse(restaurants);
           } else {
-            return fetchRestaurants(evt);
+            return fetchRestaurantsFromServer(evt);
           }
         })
       );
@@ -406,7 +406,7 @@ self.addEventListener('fetch', (evt) => {
           if(restaurant){
             return constructResponse(restaurant);        
           } else {
-            return fetchRestaurants(evt);
+            return fetchRestaurantsFromServer(evt);
           }
         })
       );
@@ -416,7 +416,16 @@ self.addEventListener('fetch', (evt) => {
 
   if (requestUrl.origin !== location.origin && 
     requestUrl.pathname.startsWith('/reviews')) {
-      return fetchReviews(evt);
+      getAllDataFromLocalDB(openDb(), 'reviews')
+        .then((items) => {
+          if(items && items.length > 0 ){
+            return constructResponse(items);
+          } else {
+            return fetchReviewsFromServer(evt);
+          }
+        })
+      ;
+      
   }
 
   evt.respondWith(
@@ -458,24 +467,24 @@ function getRestaurantById(dbPromise, restaurantId){
   });
 }
 
-function getAllRestaurants(dbPromise){
-  let restaurants = [];
+function getAllDataFromLocalDB(dbPromise, entity = 'restaurants'){
+  let items = [];
   return dbPromise.then(db => { 
-    let tx = db.transaction('restaurants');
-    let store = tx.objectStore('restaurants');
+    let tx = db.transaction(entity);
+    let store = tx.objectStore(entity);
     return store.openCursor();
   })
-  .then(function readRestaurant(cursor){
+  .then(function readItem(cursor){
     if(!cursor) return;
-    restaurants.push(cursor.value);
-    return cursor.continue().then(readRestaurant);
+    items.push(cursor.value);
+    return cursor.continue().then(readItem);
   })
   .then(() => { 
     // console.log('get restaurants return', restaurants);
-    return restaurants; })
+    return items; })
   .catch((err) => { 
     // console.log('get restaurants error', err);
-    return restaurants;
+    return items;
   });
 }
 
@@ -497,7 +506,7 @@ function openDb(){
   return dbPromise;
 } 
 
-function fetchRestaurants(evt){
+function fetchRestaurantsFromServer(evt){
   return fetch(evt.request).then((resp) => {
     // TODO - save response for network request
     let clonedResp = resp.clone();
@@ -518,7 +527,7 @@ function fetchRestaurants(evt){
 }
 
 
-function fetchReviews(evt){
+function fetchReviewsFromServer(evt){
   console.log(evt);
   if(evt.request.method === 'GET'){
     return fetch(evt.request).then((resp) => {
@@ -558,7 +567,7 @@ function initRestaurants(remoteAddr){
     request: remoteAddr
   }
   // console.log('initializing restaurants: ', evt);
-  return fetchRestaurants(evt);
+  return fetchRestaurantsFromServer(evt);
 }
 
 function getRestaurantIdFromUrl(requestUrl){
