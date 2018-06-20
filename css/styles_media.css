@@ -19,18 +19,18 @@
     flex-wrap: wrap;
   }
 
-  .inside #map-container{
+  .inside #maincontent #map-container{
     order: -1;
     position: relative;
     background: blue none repeat scroll 0 0;
     min-height: 200px;
     max-height: 400px;
     right: 0;    
-    width: 100%; 
+    width: 100% ; 
   }
 
-  .inside .restaurant-info-container {
-    width: 100%;
+  .inside #maincontent .restaurant-info-container {
+    width: 100% ;
   }
 
   .inside #restaurant-container, 
