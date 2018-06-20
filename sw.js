@@ -483,6 +483,7 @@ function openDb(){
        var restaurantsStore = upgradeDB.createObjectStore('restaurants', {keyPath: 'id'});
        restaurantsStore.createIndex('cuisines', 'cuisine_type');
        restaurantsStore.createIndex('neighborhoods', 'neighborhood');
+       var reviewsStore = upgradeDB.createObjectStore('reviews', {keyPath: 'id'});
       // case 1:
       //   upgradeDB.createObjectStore('objs', {keyPath: 'id'});
     }
