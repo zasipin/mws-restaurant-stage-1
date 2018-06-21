@@ -60,7 +60,7 @@ function fetchReviewsForRestaurant(restaurantId){
 
   DBHelper.fetchReviewsForRestaurant(restaurantId, (error, reviews) => {
     self.reviews = reviews;
-    if (!reviews) {
+    if (!reviews && error) {
       console.error(error);
       return;
     }
@@ -152,6 +152,7 @@ fillReviewsHTML = (reviews = self.reviews) => {
   addFormEventListener();
 
   const container = document.getElementById('reviews-container');
+  
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   title.setAttribute('tabindex', '0');
@@ -225,8 +226,10 @@ function addFormEventListener(){
     };
     DBHelper.saveReviewForRestaurant(review, (err, response)=>{
       if(err){
-        console.log(err, response);
+        // console.log(err, response);
+        return;
       }
+      createReviewHTML(response);
     });
   })
 };

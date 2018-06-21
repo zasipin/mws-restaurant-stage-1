@@ -541,16 +541,16 @@ function fetchReviewsFromServer(evt){
     //.then(removeTempReviews)
     .catch(err => {
       // no connection
-      
+      console.log(evt.request);
+       
       // save review in IDB
       review = {
         "id": `temp' + ${reviewId}`,
-        "restaurant_id": this.restaurant.id,
-        "name": elems.name.value,
-        "rating": elems.rating.value,
-        "comments": elems.comments.value
+        ...evt.request.body,
+        createdAt: new Date(),
+        local: 'X'
       };
-      saveReviews(openDb(), []);
+      saveReviews(openDb(), [review]);
       // show message
 
       // set function to send requests
@@ -582,6 +582,7 @@ function reviewResponseHandler(resp){
 
 function saveReviews(dbPromise, reviews){
   saveItemsToIDB(dbPromise, reviews, 'reviews');
+  //getAllDataFromLocalDB(openDb(), 'reviews');
 }
 
 function saveItemsToIDB(dbPromise, items, entity){
