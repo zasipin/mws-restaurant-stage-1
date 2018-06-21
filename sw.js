@@ -416,16 +416,19 @@ self.addEventListener('fetch', (evt) => {
 
   if (requestUrl.origin !== location.origin && 
     requestUrl.pathname.startsWith('/reviews')) {
-      getAllDataFromLocalDB(openDb(), 'reviews')
-        .then((items) => {
-          if(items && items.length > 0 ){
-            return constructResponse(items);
-          } else {
-            return fetchReviewsFromServer(evt);
-          }
-        })
-      ;
-      
+      if(evt.request.method === 'GET'){
+        getAllDataFromLocalDB(openDb(), 'reviews')
+          .then((items) => {
+            if(items && items.length > 0 ){
+              return constructResponse(items);
+            } else {
+              return fetchReviewsFromServer(evt);
+            }
+          });
+      }
+      if(evt.request.method === 'POST'){
+        return fetchReviewsFromServer(evt);
+      }
   }
 
   evt.respondWith(
@@ -446,8 +449,8 @@ self.addEventListener('fetch', (evt) => {
 
 });
 
-function saveRestaurants(dbPromise, restaurants){
-  saveItems(dbPromise, reviews, 'restaurants');
+function saveRestaurantsToIDB(dbPromise, restaurants){
+  saveItemsToIDB(dbPromise, restaurants, 'restaurants');
   // let tx = dbPromise.then((db) => { 
   //   let tx = db.transaction('restaurants', 'readwrite');
   //   let store = tx.objectStore('restaurants');
@@ -517,8 +520,8 @@ function fetchRestaurantsFromServer(evt){
     .then((restaurants) => {
       // console.log('saving restaurants: ', restaurants);
       if(!Array.isArray(restaurants)) 
-        saveRestaurants(openDb(), [restaurants]);
-      saveRestaurants(openDb(), restaurants);
+        saveRestaurantsToIDB(openDb(), [restaurants]);
+      saveRestaurantsToIDB(openDb(), restaurants);
     })
     .catch((err) => {
       // console.log('Error fetching restaurants', err);
@@ -526,7 +529,6 @@ function fetchRestaurantsFromServer(evt){
     return resp;
   });
 }
-
 
 function fetchReviewsFromServer(evt){
   console.log(evt);
@@ -537,7 +539,6 @@ function fetchReviewsFromServer(evt){
       let reviewClonedResp = resp.clone();
       reviewClonedResp.json()
       .then((reviews) => {
-        // console.log('saving restaurants: ', restaurants);
         if(!Array.isArray(reviews)) 
           saveReviews(openDb(), [reviews]);
         saveReviews(openDb(), reviews);
@@ -548,13 +549,35 @@ function fetchReviewsFromServer(evt){
       return resp;
     });
   }
+
+  if(evt.request.method === 'POST'){
+    return fetch(evt.request).then((resp) => {
+      // TODO - save response for network request
+      // TODO: save restaurants request to DB
+      let reviewClonedResp = resp.clone();
+      console.log(resp);
+      // reviewClonedResp.json()
+      // .then((reviews) => {
+      //   if(!Array.isArray(reviews)) 
+      //     saveReviews(openDb(), [reviews]);
+      //   saveReviews(openDb(), reviews);
+      // })
+      // .catch((err) => {
+      //   // console.log('Error fetching restaurants', err);
+      // });    
+      return resp;
+    })
+    .catch(err => {
+      console.log('post err', err);
+    });
+  }
 }
 
 function saveReviews(dbPromise, reviews){
-  saveItems(dbPromise, reviews, 'reviews');
+  saveItemsToIDB(dbPromise, reviews, 'reviews');
 }
 
-function saveItems(dbPromise, items, entity){
+function saveItemsToIDB(dbPromise, items, entity){
   let tx = dbPromise.then((db) => { 
     let tx = db.transaction(entity, 'readwrite');
     let store = tx.objectStore(entity);

@@ -224,7 +224,9 @@ function addFormEventListener(){
       "comments": elems.comments.value
     };
     DBHelper.saveReviewForRestaurant(review, (err, response)=>{
-      console.log(response);
+      if(err){
+        console.log(err, response);
+      }
     });
   })
 };

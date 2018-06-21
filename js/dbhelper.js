@@ -199,7 +199,7 @@ class DBHelper {
       callback(null, resp);
     })
     .catch(err => {
-      const error = (`Request failed. Returned status of ${err.status}`);
+      const error = (`Request failed. Returned status of ${err.status}, error: ${err}`);
       callback(error, null);
     });
 }
