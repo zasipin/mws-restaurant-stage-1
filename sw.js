@@ -533,44 +533,34 @@ function fetchRestaurantsFromServer(evt){
 function fetchReviewsFromServer(evt){
   console.log(evt);
   if(evt.request.method === 'GET'){
-    return fetch(evt.request).then((resp) => {
-      // TODO - save response for network request
-      // TODO: save restaurants request to DB
-      let reviewClonedResp = resp.clone();
-      reviewClonedResp.json()
-      .then((reviews) => {
-        if(!Array.isArray(reviews)) 
-          saveReviews(openDb(), [reviews]);
-        saveReviews(openDb(), reviews);
-      })
-      .catch((err) => {
-        // console.log('Error fetching restaurants', err);
-      });    
-      return resp;
-    });
+    return fetch(evt.request).then(reviewResponseHandler);
   }
 
   if(evt.request.method === 'POST'){
-    return fetch(evt.request).then((resp) => {
-      // TODO - save response for network request
-      // TODO: save restaurants request to DB
-      let reviewClonedResp = resp.clone();
-      console.log(resp);
-      // reviewClonedResp.json()
-      // .then((reviews) => {
-      //   if(!Array.isArray(reviews)) 
-      //     saveReviews(openDb(), [reviews]);
-      //   saveReviews(openDb(), reviews);
-      // })
-      // .catch((err) => {
-      //   // console.log('Error fetching restaurants', err);
-      // });    
-      return resp;
-    })
+    return fetch(evt.request).then(reviewResponseHandler)
     .catch(err => {
-      console.log('post err', err);
+      // no connection
+      // console.log('post err', err);
     });
   }
+}
+
+function reviewResponseHandler(resp){
+  
+    // TODO - save response for network request
+    // TODO: save restaurants request to DB
+    let reviewClonedResp = resp.clone();
+    // console.log(resp);
+    reviewClonedResp.json()
+    .then((reviews) => {
+      if(!Array.isArray(reviews)) 
+        saveReviews(openDb(), [reviews]);
+      saveReviews(openDb(), reviews);
+    })
+    .catch((err) => {
+      // console.log('Error fetching restaurants', err);
+    });    
+    return resp;  
 }
 
 function saveReviews(dbPromise, reviews){
