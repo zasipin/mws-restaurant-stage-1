@@ -540,6 +540,13 @@ function fetchReviewsFromServer(evt){
     return fetch(evt.request).then(reviewResponseHandler)
     .catch(err => {
       // no connection
+      
+      // save review in IDB
+
+      // show message
+
+      // set function to send requests
+      
       // console.log('post err', err);
     });
   }
