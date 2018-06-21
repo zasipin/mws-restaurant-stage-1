@@ -538,15 +538,25 @@ function fetchReviewsFromServer(evt){
 
   if(evt.request.method === 'POST'){
     return fetch(evt.request).then(reviewResponseHandler)
+    //.then(removeTempReviews)
     .catch(err => {
       // no connection
       
       // save review in IDB
-
+      review = {
+        "id": `temp' + ${reviewId}`,
+        "restaurant_id": this.restaurant.id,
+        "name": elems.name.value,
+        "rating": elems.rating.value,
+        "comments": elems.comments.value
+      };
+      saveReviews(openDb(), []);
       // show message
 
       // set function to send requests
-      
+
+      // removeTempReview on success
+
       // console.log('post err', err);
     });
   }
