@@ -172,10 +172,15 @@ fillReviewsHTML = (reviews = self.reviews) => {
   container.appendChild(divRL);
 }
 
+function appendChildReview(review){
+  const divRL = document.getElementById('reviews-list');
+  divRL.appendChild(createReviewHTML(review));
+}
+
 /**
  * Create review HTML and add it to the webpage.
  */
-createReviewHTML = (review) => {
+function createReviewHTML(review){
   const article = document.createElement('article');
   article.setAttribute('aria-label', 'review item');
  
@@ -229,11 +234,15 @@ function addFormEventListener(){
         // console.log(err, response);
         return;
       }
-      createReviewHTML(response);
+      // createReviewHTML(response);
+      appendChildReview(response);
     });
   })
 };
 
+// function createReviewHTML(response){
+
+// }
 
 /**
  * Add restaurant name to the breadcrumb navigation menu
