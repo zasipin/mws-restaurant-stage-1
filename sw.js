@@ -539,22 +539,25 @@ function fetchReviewsFromServer(evt){
   if(evt.request.method === 'POST'){
     return fetch(evt.request).then(reviewResponseHandler)
     //.then(removeTempReviews)
+    //.fetchNewReviews from server
     .catch(err => {
       // no connection
-      console.log(evt.request);
+      console.log('no connection', evt.request);
        
       // save review in IDB
+      let date = new Date();
       review = {
         "id": `temp' + ${reviewId}`,
         ...evt.request.body,
-        createdAt: new Date(),
+        createdAt: date,
+        updatedAt: date,
         local: 'X'
       };
       saveReviews(openDb(), [review]);
       // show message
 
       // set function to send requests
-
+      setSendPostRequest(evt)();
       // removeTempReview on success
 
       // console.log('post err', err);
@@ -562,8 +565,18 @@ function fetchReviewsFromServer(evt){
   }
 }
 
+function setSendPostRequest(evt){
+  let timeout = 50;
+
+  return function(){
+    timeout = timeout > 30000 ? timeout : tineout * 2; 
+    setTimeout(()=>{
+      fetchReviewsFromServer(evt);
+    }, timeout);
+  }
+}
+
 function reviewResponseHandler(resp){
-  
     // TODO - save response for network request
     // TODO: save restaurants request to DB
     let reviewClonedResp = resp.clone();
@@ -572,7 +585,8 @@ function reviewResponseHandler(resp){
     .then((reviews) => {
       if(!Array.isArray(reviews)) 
         saveReviews(openDb(), [reviews]);
-      saveReviews(openDb(), reviews);
+      else  
+        saveReviews(openDb(), reviews);
     })
     .catch((err) => {
       // console.log('Error fetching restaurants', err);
@@ -589,15 +603,14 @@ function saveItemsToIDB(dbPromise, items, entity){
   let tx = dbPromise.then((db) => { 
     let tx = db.transaction(entity, 'readwrite');
     let store = tx.objectStore(entity);
-    for(let review of items){
-      store.get(review.id).then(val => {
+    for(let item of items){
+      store.get(item.id).then(val => {
         if(!val)
-          store.put(review);
+          store.put(item);
       })
     }
   });
 }
-
 
 function initRestaurants(remoteAddr){
   let evt = {
