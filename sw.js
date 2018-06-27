@@ -546,6 +546,7 @@ function fetchReviewsFromServer(evt){
        
       // save review in IDB
       let date = new Date();
+      let reviewId = date.getMilliseconds();
       review = {
         "id": `temp' + ${reviewId}`,
         ...evt.request.body,
