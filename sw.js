@@ -321,7 +321,7 @@ const urlsToCache = [
                       'css/styles.css'
                      ];
 const dBName = 'MWSRestaurants';                     
-const remoteAddr = 'http://localhost:1337/restaurants';
+const remoteAddr = 'http://localhost:1337/';
                                 
 const cacheFilterForDelete = (cacheName) => { return cacheName.startsWith(chacheNamePrefix) && cacheName !== cacheNameCurrent };                     
 const constructImagesArray = (prefix) => {
@@ -331,6 +331,8 @@ const constructImagesArray = (prefix) => {
   }
   return images;
 }
+
+let timerSend = undefined;
 
 const imagesToCache = constructImagesArray('/img/');
 const imagesToCache266 = constructImagesArray('/img/resized_266/');
@@ -342,7 +344,10 @@ self.addEventListener('install', (evt) => {
     caches.open(cacheNameCurrent).then((cache) => {
       return cache.addAll(urlsToCache).then(()=>{
         // return cache.addAll([...imagesToCache, ...imagesToCache430, ...imagesToCache266]);
-        return initRestaurants(remoteAddr);
+        return initRestaurants(remoteAddr + 'restaurants');
+        // .then(()=>{
+        //   return initReviews(remoteAddr + 'reviews');
+        // });
       });
     })
   );
@@ -531,7 +536,7 @@ function fetchRestaurantsFromServer(evt){
 }
 
 function fetchReviewsFromServer(evt){
-  console.log(evt);
+  //console.log(evt);
   if(evt.request.method === 'GET'){
     return fetch(evt.request).then(reviewResponseHandler);
   }
@@ -548,13 +553,15 @@ function fetchReviewsFromServer(evt){
       let date = new Date();
       let reviewId = date.getMilliseconds();
       review = {
-        "id": `temp' + ${reviewId}`,
+        "id": `temp${reviewId}`,
         ...evt.request.body,
         createdAt: date,
         updatedAt: date,
-        local: 'X'
+        local: true
       };
-      saveReviews(openDb(), [review]);
+      saveReviews(openDb(), [review])
+      .then(()=>{
+      });
       // show message
 
       // set function to send requests
@@ -566,15 +573,110 @@ function fetchReviewsFromServer(evt){
   }
 }
 
+
 function setSendPostRequest(evt){
-  let timeout = 50;
+  let timeout = 5000;
 
   return function(){
-    timeout = timeout > 30000 ? timeout : tineout * 2; 
-    setTimeout(()=>{
-      fetchReviewsFromServer(evt);
+    // timeout = timeout > 30000 ? timeout : tineout * 2; 
+    if(timerSend) return;
+    timerSend = setInterval(()=>{
+      // fetchReviewsFromServer(evt);
+      sendTempReviews();
     }, timeout);
   }
+}
+
+function saveReviewsForRestaurant(reviews) {
+  let requests = [];
+  for(item of reviews)
+    requests.push(fetch(`${remoteAddr}reviews`, {
+      method: 'POST',
+      header: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(item)
+    })
+      .then((resp) => resp.json())
+      .then(resp => { 
+        // callback(null, resp);
+        return resp;
+      })
+      .catch(err => {
+        const error = (`Request failed. Returned status of ${err.status}, error: ${err}`);
+        // callback(error, null);
+      })
+    )
+  return Promise.all(requests);
+}
+
+
+function sendTempReviews(){
+  console.log('====================================');
+  console.log('sendTempReviews called');
+  console.log('====================================');
+  if(!timerSend) return;
+  
+  getTempItemsFromDb(openDb())
+  .then(items=> {
+    saveReviewsForRestaurant(items)    
+    .then((responses)=>{
+      if(responses && responses.length > 0 && responses[0]){
+        clearInterval(timerSend);
+        timerSend = undefined;
+        removeTempReviews(openDb()).then(items => {          
+          // fetchReviewsForRestaurant(items[0].restaurantId);
+          
+        });
+        saveReviews(openDB(), reviews);
+        
+      }
+    });
+  });
+} 
+
+function getTempItemsFromDb(dbPromise, entity = 'reviews'){
+ 
+  let items = [];
+  return dbPromise.then(db => { 
+    let tx = db.transaction(entity);
+    let store = tx.objectStore(entity);
+    return store.openCursor();
+  })
+  .then(function readItem(cursor){
+    if(!cursor) return;
+    if(cursor.value.local === true)
+      items.push(cursor.value);
+    return cursor.continue().then(readItem);
+  })
+  .then(() => { 
+    return items; 
+  })
+  .catch((err) => { 
+    return items;
+  });
+}
+
+function removeTempReviews(dbPromise, entity = 'reviews'){
+  let items = [];
+  return dbPromise.then(db => { 
+    let tx = db.transaction(entity, 'readwrite');
+    let store = tx.objectStore(entity);
+    return store.openCursor();
+  })
+  .then(function readItem(cursor){
+    if(!cursor) return;
+    if(cursor.value.local === true)
+      cursor.delete();
+    return cursor.continue().then(readItem);
+  })
+  .then(() => { 
+    return items; 
+  })
+  .catch((err) => { 
+    return items;
+  });
 }
 
 function reviewResponseHandler(resp){
@@ -596,7 +698,7 @@ function reviewResponseHandler(resp){
 }
 
 function saveReviews(dbPromise, reviews){
-  saveItemsToIDB(dbPromise, reviews, 'reviews');
+  return saveItemsToIDB(dbPromise, reviews, 'reviews');
   //getAllDataFromLocalDB(openDb(), 'reviews');
 }
 
@@ -611,14 +713,21 @@ function saveItemsToIDB(dbPromise, items, entity){
       })
     }
   });
+  return tx;
 }
 
 function initRestaurants(remoteAddr){
   let evt = {
     request: remoteAddr
   }
-  // console.log('initializing restaurants: ', evt);
   return fetchRestaurantsFromServer(evt);
+}
+
+function initReviews(remoteAddr){
+  let evt = {
+    request: remoteAddr
+  }
+  return fetchReviewsFromServer(evt);
 }
 
 function getRestaurantIdFromUrl(requestUrl){
