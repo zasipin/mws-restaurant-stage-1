@@ -233,6 +233,7 @@ function addFormEventListener(){
       if(err){
         // console.log(err, response);
         review.createdAt = new Date();
+        review.updatedAt = new Date();
         appendChildReview(review);
         return;
       }
