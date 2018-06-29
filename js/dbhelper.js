@@ -182,7 +182,7 @@ class DBHelper {
  }
 
   /**
-  * Fetch all reviews.
+  * Save all reviews.
   */
  static saveReviewForRestaurant(reviewOjb, callback) {
 
@@ -203,6 +203,6 @@ class DBHelper {
                     review: reviewOjb};
       callback(error, null);
     });
-}
+  }
 }
 
