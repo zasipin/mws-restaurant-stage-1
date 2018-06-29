@@ -542,6 +542,7 @@ function fetchReviewsFromServer(evt){
   }
 
   if(evt.request.method === 'POST'){
+    let clonedRequest = evt.request.clone();
     return fetch(evt.request).then(reviewResponseHandler)
     //.then(removeTempReviews)
     //.fetchNewReviews from server
@@ -552,16 +553,26 @@ function fetchReviewsFromServer(evt){
       // save review in IDB
       let date = new Date();
       let reviewId = date.getMilliseconds();
-      review = {
-        "id": `temp${reviewId}`,
-        ...evt.request.body,
-        createdAt: date,
-        updatedAt: date,
-        local: true
-      };
-      saveReviews(openDb(), [review])
-      .then(()=>{
+      // review = {
+      //   "id": `temp${reviewId}`,
+      //   ...JSON.parse(evt.request.json()),//err.review,
+      //   createdAt: date,
+      //   updatedAt: date,
+      //   local: true
+      // };
+      clonedRequest.json().then((reviewData)=>{
+        review = {
+          "id": `temp${reviewId}`,
+          ...reviewData,//JSON.parse(evt.request.json()),//err.review,
+          createdAt: date.toISOString(),
+          updatedAt: date.toISOString(),
+          local: true
+        };
+        saveReviews(openDb(), [review])
+        .then(()=>{
+        });
       });
+      
       // show message
 
       // set function to send requests
@@ -589,14 +600,24 @@ function setSendPostRequest(evt){
 
 function saveReviewsForRestaurant(reviews) {
   let requests = [];
-  for(item of reviews)
+  for(item of reviews){
+    
+    let review = {
+        "restaurant_id": item.restaurant_id,
+        "name": item.name,
+        "rating": item.rating,
+        "comments": item.comments,
+        "createdAt": item.createdAt,
+        "updatedAt": item.updatedAt
+      };
+        
     requests.push(fetch(`${remoteAddr}reviews`, {
       method: 'POST',
       header: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(item)
+      body: JSON.stringify(review)
     })
       .then((resp) => resp.json())
       .then(resp => { 
@@ -608,14 +629,12 @@ function saveReviewsForRestaurant(reviews) {
         // callback(error, null);
       })
     )
+  }
   return Promise.all(requests);
 }
 
 
 function sendTempReviews(){
-  console.log('====================================');
-  console.log('sendTempReviews called');
-  console.log('====================================');
   if(!timerSend) return;
   
   getTempItemsFromDb(openDb())
@@ -626,10 +645,9 @@ function sendTempReviews(){
         clearInterval(timerSend);
         timerSend = undefined;
         removeTempReviews(openDb()).then(items => {          
-          // fetchReviewsForRestaurant(items[0].restaurantId);
           
         });
-        saveReviews(openDB(), reviews);
+        saveReviews(openDb(), responses);
         
       }
     });

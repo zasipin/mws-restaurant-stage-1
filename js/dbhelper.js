@@ -199,7 +199,8 @@ class DBHelper {
       callback(null, resp);
     })
     .catch(err => {
-      const error = (`Request failed. Returned status of ${err.status}, error: ${err}`);
+      const error = {text: `Request failed. Returned status of ${err.status}, error: ${err}`,
+                    review: reviewOjb};
       callback(error, null);
     });
 }

@@ -232,6 +232,7 @@ function addFormEventListener(){
     DBHelper.saveReviewForRestaurant(review, (err, response)=>{
       if(err){
         // console.log(err, response);
+        review.createdAt = new Date();
         appendChildReview(review);
         return;
       }
