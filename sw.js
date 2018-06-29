@@ -422,18 +422,21 @@ self.addEventListener('fetch', (evt) => {
   if (requestUrl.origin !== location.origin && 
     requestUrl.pathname.startsWith('/reviews')) {
       if(evt.request.method === 'GET'){
-        getAllDataFromLocalDB(openDb(), 'reviews')
+        evt.respondWith(getAllDataFromLocalDB(openDb(), 'reviews')
           .then((items) => {
             if(items && items.length > 0 ){
               return constructResponse(items);
             } else {
               return fetchReviewsFromServer(evt);
             }
-          });
+          })
+        );
       }
       if(evt.request.method === 'POST'){
-        return fetchReviewsFromServer(evt);
+        evt.respondWith(fetchReviewsFromServer(evt));
       }
+
+      return;
   }
 
   evt.respondWith(
