@@ -229,6 +229,8 @@ function addFormEventListener(){
       "rating": elems.rating.value,
       "comments": elems.comments.value
     };
+    for(let element of elems)
+      element.value = '';
     DBHelper.saveReviewForRestaurant(review, (err, response)=>{
       if(err){
         // console.log(err, response);
