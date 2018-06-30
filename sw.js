@@ -422,7 +422,12 @@ self.addEventListener('fetch', (evt) => {
   if (requestUrl.origin !== location.origin && 
     requestUrl.pathname.startsWith('/reviews')) {
       if(evt.request.method === 'GET'){
-        evt.respondWith(getAllDataFromLocalDB(openDb(), 'reviews')
+        // let restaurantId = getRestaurantIdFromUrl(requestUrl);
+        evt.respondWith(fetchReviewsFromServer(evt)
+          .then((response)=>{
+            return getReviewsForRestaurantFromLocalDB(requestUrl);
+          })
+          .catch(err => getReviewsForRestaurantFromLocalDB(requestUrl))
           .then((items) => {
             if(items && items.length > 0 ){
               return constructResponse(items);
@@ -500,6 +505,14 @@ function getAllDataFromLocalDB(dbPromise, entity = 'restaurants'){
   });
 }
 
+function getReviewsForRestaurantFromLocalDB(url){
+  let currentRestaurantId = getRestaurantIdFromReviewUrl(url);
+  return getAllDataFromLocalDB(openDb(), 'reviews').then((items)=>{
+    return items.filter(item => item.restaurant_id.toString() == currentRestaurantId.toString());
+  });
+}
+
+
 function openDb(){
   const dbPromise = idb.open(dBName, 1, (upgradeDB) => {
     // Note: we don't use 'break' in this switch statement,
@@ -510,6 +523,7 @@ function openDb(){
        restaurantsStore.createIndex('cuisines', 'cuisine_type');
        restaurantsStore.createIndex('neighborhoods', 'neighborhood');
        var reviewsStore = upgradeDB.createObjectStore('reviews', {keyPath: 'id'});
+      //  reviewsStore.createIndex('restaurant_id', 'restaurant_id');
       // case 1:
       //   upgradeDB.createObjectStore('objs', {keyPath: 'id'});
     }
@@ -556,17 +570,11 @@ function fetchReviewsFromServer(evt){
       // save review in IDB
       let date = new Date();
       let reviewId = date.getMilliseconds();
-      // review = {
-      //   "id": `temp${reviewId}`,
-      //   ...JSON.parse(evt.request.json()),//err.review,
-      //   createdAt: date,
-      //   updatedAt: date,
-      //   local: true
-      // };
+
       clonedRequest.json().then((reviewData)=>{
         review = {
           "id": `temp${reviewId}`,
-          ...reviewData,//JSON.parse(evt.request.json()),//err.review,
+          ...reviewData,
           createdAt: date.toISOString(),
           updatedAt: date.toISOString(),
           local: true
@@ -592,10 +600,8 @@ function setSendPostRequest(evt){
   let timeout = 5000;
 
   return function(){
-    // timeout = timeout > 30000 ? timeout : tineout * 2; 
     if(timerSend) return;
     timerSend = setInterval(()=>{
-      // fetchReviewsFromServer(evt);
       sendTempReviews();
     }, timeout);
   }
@@ -754,6 +760,11 @@ function initReviews(remoteAddr){
 function getRestaurantIdFromUrl(requestUrl){
   let segments = requestUrl.pathname.split('/');
   return segments.length > 1 ? segments[2] : null;
+};
+
+function getRestaurantIdFromReviewUrl(requestUrl){
+  let segments = requestUrl.search.split('=');
+  return segments.length > 1 ? segments[1] : null;
 };
 
 function constructResponse(jsonData){
