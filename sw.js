@@ -322,7 +322,9 @@ const urlsToCache = [
                      ];
 const dBName = 'MWSRestaurants';                     
 const remoteAddr = 'http://localhost:1337/';
-                                
+const RESTAURANTS_ENTITY = 'restaurants';
+const REVIEWS_ENTITY = 'reviews';
+
 const cacheFilterForDelete = (cacheName) => { return cacheName.startsWith(chacheNamePrefix) && cacheName !== cacheNameCurrent };                     
 const constructImagesArray = (prefix) => {
   let images = [];
@@ -405,6 +407,11 @@ self.addEventListener('fetch', (evt) => {
     
     if(singleRestaurantRequest){
       let restaurantId = getRestaurantIdFromUrl(requestUrl);
+      if(evt.request.method === 'PUT'){
+        evt.respondWith(changeFavoriteForRestaurant(restaurantId, evt));
+        return;
+      }
+
       evt.respondWith(
         getRestaurantById(openDb(), restaurantId)
         .then((restaurant) => {
@@ -463,7 +470,7 @@ self.addEventListener('fetch', (evt) => {
 });
 
 function saveRestaurantsToIDB(dbPromise, restaurants){
-  saveItemsToIDB(dbPromise, restaurants, 'restaurants');
+  saveItemsToIDB(dbPromise, restaurants, RESTAURANTS_ENTITY);
   // let tx = dbPromise.then((db) => { 
   //   let tx = db.transaction('restaurants', 'readwrite');
   //   let store = tx.objectStore('restaurants');
@@ -478,13 +485,13 @@ function saveRestaurantsToIDB(dbPromise, restaurants){
 
 function getRestaurantById(dbPromise, restaurantId){  
   return dbPromise.then(db => { 
-    let tx = db.transaction('restaurants');
-    let store = tx.objectStore('restaurants');
+    let tx = db.transaction(RESTAURANTS_ENTITY);
+    let store = tx.objectStore(RESTAURANTS_ENTITY);
     return store.get(parseInt(restaurantId));
   });
 }
 
-function getAllDataFromLocalDB(dbPromise, entity = 'restaurants'){
+function getAllDataFromLocalDB(dbPromise, entity = RESTAURANTS_ENTITY){
   let items = [];
   return dbPromise.then(db => { 
     let tx = db.transaction(entity);
@@ -507,7 +514,7 @@ function getAllDataFromLocalDB(dbPromise, entity = 'restaurants'){
 
 function getReviewsForRestaurantFromLocalDB(url){
   let currentRestaurantId = getRestaurantIdFromReviewUrl(url);
-  return getAllDataFromLocalDB(openDb(), 'reviews').then((items)=>{
+  return getAllDataFromLocalDB(openDb(), REVIEWS_ENTITY).then((items)=>{
     return items.filter(item => item.restaurant_id.toString() == currentRestaurantId.toString());
   });
 }
@@ -519,10 +526,10 @@ function openDb(){
     // the fall-through behaviour is what we want.
     switch (upgradeDB.oldVersion) {
       case 0:
-       var restaurantsStore = upgradeDB.createObjectStore('restaurants', {keyPath: 'id'});
+       var restaurantsStore = upgradeDB.createObjectStore(RESTAURANTS_ENTITY, {keyPath: 'id'});
        restaurantsStore.createIndex('cuisines', 'cuisine_type');
        restaurantsStore.createIndex('neighborhoods', 'neighborhood');
-       var reviewsStore = upgradeDB.createObjectStore('reviews', {keyPath: 'id'});
+       var reviewsStore = upgradeDB.createObjectStore(REVIEWS_ENTITY, {keyPath: 'id'});
       //  reviewsStore.createIndex('restaurant_id', 'restaurant_id');
       // case 1:
       //   upgradeDB.createObjectStore('objs', {keyPath: 'id'});
@@ -565,7 +572,7 @@ function fetchReviewsFromServer(evt){
     //.fetchNewReviews from server
     .catch(err => {
       // no connection
-      console.log('no connection', evt.request);
+      // console.log('no connection', evt.request);
        
       // save review in IDB
       let date = new Date();
@@ -663,7 +670,7 @@ function sendTempReviews(){
   });
 } 
 
-function getTempItemsFromDb(dbPromise, entity = 'reviews'){
+function getTempItemsFromDb(dbPromise, entity = REVIEWS_ENTITY){
  
   let items = [];
   return dbPromise.then(db => { 
@@ -685,7 +692,7 @@ function getTempItemsFromDb(dbPromise, entity = 'reviews'){
   });
 }
 
-function removeTempReviews(dbPromise, entity = 'reviews'){
+function removeTempReviews(dbPromise, entity = REVIEWS_ENTITY){
   let items = [];
   return dbPromise.then(db => { 
     let tx = db.transaction(entity, 'readwrite');
@@ -696,6 +703,7 @@ function removeTempReviews(dbPromise, entity = 'reviews'){
     if(!cursor) return;
     if(cursor.value.local === true)
       cursor.delete();
+      
     return cursor.continue().then(readItem);
   })
   .then(() => { 
@@ -725,8 +733,8 @@ function reviewResponseHandler(resp){
 }
 
 function saveReviews(dbPromise, reviews){
-  return saveItemsToIDB(dbPromise, reviews, 'reviews');
-  //getAllDataFromLocalDB(openDb(), 'reviews');
+  return saveItemsToIDB(dbPromise, reviews, REVIEWS_ENTITY);
+  //getAllDataFromLocalDB(openDb(), REVIEWS_ENTITY);
 }
 
 function saveItemsToIDB(dbPromise, items, entity){
@@ -742,6 +750,40 @@ function saveItemsToIDB(dbPromise, items, entity){
   });
   return tx;
 }
+
+function changeItemToIDB(dbPromise, item, entity){
+  let tx = dbPromise.then((db) => { 
+    let tx = db.transaction(entity, 'readwrite');
+    let store = tx.objectStore(entity);
+      store.get(item.id)
+      .then(val => {
+        if(val) store.put(item);
+      });
+  });
+  return tx;
+
+  // let items = [];
+  // return dbPromise.then(db => { 
+  //   let tx = db.transaction(entity, 'readwrite');
+  //   let store = tx.objectStore(entity);
+  //   return store.openCursor();
+  // })
+  // .then(function readItem(cursor){
+  //   if(!cursor) return;
+  //   if(cursor.value.id === item.id)
+  //     cursor.value = item;
+  //   // cursor.  
+  //   return cursor.continue().then(readItem);
+  // })
+  // .then(() => { 
+  //   return item; 
+  // })
+  // .catch((err) => { 
+  //   return item;
+  // });
+
+}
+
 
 function initRestaurants(remoteAddr){
   let evt = {
@@ -771,4 +813,56 @@ function constructResponse(jsonData){
   let blob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
   let init = { "status": 200, type: 'JSON' };         
   return new Response(blob, init); 
+}
+
+function changeFavoriteForRestaurant(restaurantId, evt){
+  return fetch(evt.request)
+  .then(response=>{
+    return changeFavoriteRestaurantInDb(restaurantId);
+  })
+  .catch(err => {
+    changeFavoriteRestaurantInDb(restaurantId);
+    markRestaurantInDbAsLocal(restaurantId);
+    //keep trying to update restaurants on server
+
+  });
+}
+
+function changeFavoriteRestaurantInDb(restaurantId){
+  getRestaurantById(openDb(), restaurantId)
+  .then(restaurant => {
+    restaurant.is_favorite = !restaurant.is_favorite;
+    changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);  
+  });
+  
+}
+
+function markRestaurantInDbAsLocal(restaurantId){
+  getRestaurantById(openDb(), restaurantId)
+  .then(restaurant => {
+    restaurant.local = true;
+    changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);  
+  });
+  
+}
+
+
+function markRestaurantInDbAsNotLocal(restaurantId){
+  getRestaurantById(openDb(), restaurantId)
+  .then(restaurant => {
+    restaurant.local = false;
+    changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);  
+  });
+}
+
+function getLocalRestaurants(){
+  let restaurants = getAllDataFromLocalDB(openDb(), RESTAURANTS_ENTITY)
+  .then(restaurants => {
+    let localRestaurants = restaurants.filter(item => item.local);
+    for(let restaurant of localRestaurants){
+      restaurant.local = false;
+      changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);
+    }  
+  });
+  
 }

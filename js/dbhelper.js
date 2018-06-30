@@ -204,5 +204,19 @@ class DBHelper {
       callback(error, null);
     });
   }
+
+  static changeRestaurantFavorite(id, isFavorite) {
+    return fetch(`${DBHelper.DATABASE_URL}restaurants/${id}/?is_favorite=${isFavorite}`, {
+      method: 'PUT'      
+    })
+      .then((resp) => resp.json())
+      //.then(resp => { 
+        //callback(null, resp);
+      //})
+      //.catch(err => {
+      //  const error = `Request failed. Returned status of ${err.status}, error: ${err}`;
+      //  callback(error, null);
+      //});
+  }
 }
 

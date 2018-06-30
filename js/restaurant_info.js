@@ -114,6 +114,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
+
+  let isFavorite = document.getElementById('isFavorite');
+  isFavorite.checked = restaurant.is_favorite || false;
+
   // fill reviews
   // fillReviewsHTML();
   fetchReviewsForRestaurant(restaurant.id);
@@ -150,6 +154,7 @@ fillReviewsHTML = (reviews = self.reviews) => {
 
   // add form events listener
   addFormEventListener();
+  addIsFavoriteEventListener();
 
   const container = document.getElementById('reviews-container');
   
@@ -216,6 +221,16 @@ function createReviewHTML(review){
   article.appendChild(comments);
 
   return article;
+}
+
+function addIsFavoriteEventListener(){
+  const isFav = document.getElementById('isFavorite');
+  isFav.addEventListener('click', (evt)=>{
+    DBHelper.changeRestaurantFavorite(this.restaurant.id, isFav.value)
+    .then(response=>{
+
+    });
+  });
 }
 
 function addFormEventListener(){
