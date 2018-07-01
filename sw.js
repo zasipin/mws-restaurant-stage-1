@@ -594,7 +594,7 @@ function fetchReviewsFromServer(evt){
       // show message
 
       // set function to send requests
-      setSendPostRequest(evt)();
+      setSendLocalDataRequest(evt)();
       // removeTempReview on success
 
       // console.log('post err', err);
@@ -603,13 +603,14 @@ function fetchReviewsFromServer(evt){
 }
 
 
-function setSendPostRequest(evt){
+function setSendLocalDataRequest(evt){
   let timeout = 5000;
 
   return function(){
     if(timerSend) return;
     timerSend = setInterval(()=>{
       sendTempReviews();
+      sendTempRestaurants();
     }, timeout);
   }
 }
@@ -640,11 +641,30 @@ function saveReviewsForRestaurant(reviews) {
         // callback(null, resp);
         return resp;
       })
-      .catch(err => {
-        const error = (`Request failed. Returned status of ${err.status}, error: ${err}`);
+      // .catch(err => {
+        // const error = (`Request failed. Returned status of ${err.status}, error: ${err}`);
         // callback(error, null);
-      })
+      // })
     )
+  }
+  return Promise.all(requests);
+}
+
+function saveRestaurants(items) {
+  let requests = [];
+  for(item of items){
+    requests.push(fetch(`${remoteAddr}restaurants/${item.id}/?is_favorite=${item.is_favorite}`, {
+      method: 'PUT'      
+    })
+      .then((resp) => resp.json())
+      //.then(resp => { 
+        //callback(null, resp);
+      //})
+      // .catch(err => {
+      //  const error = `Request failed. Returned status of ${err.status}, error: ${err}`;
+      //  callback(error, null);
+      // })
+    );
   }
   return Promise.all(requests);
 }
@@ -653,7 +673,7 @@ function saveReviewsForRestaurant(reviews) {
 function sendTempReviews(){
   if(!timerSend) return;
   
-  getTempItemsFromDb(openDb())
+  getTempItemsFromDb(openDb(), REVIEWS_ENTITY)
   .then(items=> {
     saveReviewsForRestaurant(items)    
     .then((responses)=>{
@@ -669,6 +689,24 @@ function sendTempReviews(){
     });
   });
 } 
+
+function sendTempRestaurants(){
+  if(!timerSend) return;
+  
+  getTempItemsFromDb(openDb(), RESTAURANTS_ENTITY)
+  .then(items=> {
+    saveRestaurants(items)    
+    .then((responses)=>{
+      if(responses && responses.length > 0 && responses[0]){
+        clearInterval(timerSend);
+        timerSend = undefined;
+        for(let item of responses)
+          markRestaurantInDbAsNotLocal(item.id);        
+      }
+    });
+  });
+} 
+
 
 function getTempItemsFromDb(dbPromise, entity = REVIEWS_ENTITY){
  
@@ -761,27 +799,6 @@ function changeItemToIDB(dbPromise, item, entity){
       });
   });
   return tx;
-
-  // let items = [];
-  // return dbPromise.then(db => { 
-  //   let tx = db.transaction(entity, 'readwrite');
-  //   let store = tx.objectStore(entity);
-  //   return store.openCursor();
-  // })
-  // .then(function readItem(cursor){
-  //   if(!cursor) return;
-  //   if(cursor.value.id === item.id)
-  //     cursor.value = item;
-  //   // cursor.  
-  //   return cursor.continue().then(readItem);
-  // })
-  // .then(() => { 
-  //   return item; 
-  // })
-  // .catch((err) => { 
-  //   return item;
-  // });
-
 }
 
 
@@ -817,52 +834,61 @@ function constructResponse(jsonData){
 
 function changeFavoriteForRestaurant(restaurantId, evt){
   return fetch(evt.request)
-  .then(response=>{
-    return changeFavoriteRestaurantInDb(restaurantId);
+  .then(response => {
+    changeFavoriteRestaurantInDb(restaurantId);
+    return response;
   })
   .catch(err => {
-    changeFavoriteRestaurantInDb(restaurantId);
-    markRestaurantInDbAsLocal(restaurantId);
-    //keep trying to update restaurants on server
-
+    changeFavoriteRestaurantInDb(restaurantId)
+    .then(()=> {
+      return markRestaurantInDbAsLocal(restaurantId)
+    })
+    .then(()=>{
+      //keep trying to update restaurants on server
+      setSendLocalDataRequest(evt)();
+    })
+    ;
+    
+    return err;
   });
 }
 
 function changeFavoriteRestaurantInDb(restaurantId){
-  getRestaurantById(openDb(), restaurantId)
+  return getRestaurantById(openDb(), restaurantId)
   .then(restaurant => {
-    restaurant.is_favorite = !restaurant.is_favorite;
-    changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);  
+    restaurant.is_favorite = !(restaurant.is_favorite.toString() === 'true');
+    return changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);  
   });
   
 }
 
 function markRestaurantInDbAsLocal(restaurantId){
-  getRestaurantById(openDb(), restaurantId)
+  return getRestaurantById(openDb(), restaurantId)
   .then(restaurant => {
     restaurant.local = true;
-    changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);  
+    return changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);  
   });
   
 }
 
 
 function markRestaurantInDbAsNotLocal(restaurantId){
-  getRestaurantById(openDb(), restaurantId)
+  return getRestaurantById(openDb(), restaurantId)
   .then(restaurant => {
     restaurant.local = false;
-    changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);  
+    return changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);  
   });
 }
 
 function getLocalRestaurants(){
-  let restaurants = getAllDataFromLocalDB(openDb(), RESTAURANTS_ENTITY)
-  .then(restaurants => {
-    let localRestaurants = restaurants.filter(item => item.local);
-    for(let restaurant of localRestaurants){
-      restaurant.local = false;
-      changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);
-    }  
-  });
-  
+  // getAllDataFromLocalDB(openDb(), RESTAURANTS_ENTITY)
+  // .then(restaurants => {
+  //   let localRestaurants = restaurants.filter(item => item.local);
+  //   return localRestaurants;
+  //   // for(let restaurant of localRestaurants){
+  //   //   restaurant.local = false;
+  //   //   changeItemToIDB(openDb(), restaurant, RESTAURANTS_ENTITY);
+  //   // }  
+  // });
+  return getTempItemsFromDb(openDb(), RESTAURANTS_ENTITY);  
 }

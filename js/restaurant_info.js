@@ -116,7 +116,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   }
 
   let isFavorite = document.getElementById('isFavorite');
-  isFavorite.checked = restaurant.is_favorite || false;
+  isFavorite.checked = restaurant.is_favorite.toString() === 'true' || false;
 
   // fill reviews
   // fillReviewsHTML();
@@ -226,7 +226,7 @@ function createReviewHTML(review){
 function addIsFavoriteEventListener(){
   const isFav = document.getElementById('isFavorite');
   isFav.addEventListener('click', (evt)=>{
-    DBHelper.changeRestaurantFavorite(this.restaurant.id, isFav.value)
+    DBHelper.changeRestaurantFavorite(this.restaurant.id, isFav.checked)
     .then(response=>{
 
     });
